@@ -1,0 +1,36 @@
+@startuml
+
+class Entidad {
+    - id : Long
+    - campo1 : String
+    - campo2 : String
+    - campo3 : String
+    - campoConfidencial : String
+}
+
+class EntidadDTO {
+    - id : Long
+    - campoPublico1 : String
+    - campoPublico2 : String
+}
+
+class EntidadRepository {
+    + findById(id: Long): Entidad
+}
+
+class EntidadService {
+    + obtenerEntidadDTO(id: Long): EntidadDTO
+    - transformarAEntidadDTO(entidad: Entidad): EntidadDTO
+}
+
+class EntidadController {
+    + getEntidad(id: Long): EntidadDTO
+}
+
+Entidad --> EntidadDTO : "Transformación de entidad a DTO"
+EntidadService --> Entidad : "Accede a datos"
+EntidadService --> EntidadDTO : "Devuelve datos como DTO"
+EntidadService --> EntidadRepository : "Consulta datos"
+EntidadController --> EntidadService : "Llama al servicio"
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml test
+
+class EntidadController {
+  +getEntidadById(id: Long): EntidadDTO
+  +createEntidad(entidadDTO: EntidadDTO): EntidadDTO
+  +updateEntidad(id: Long, entidadDTO: EntidadDTO): EntidadDTO
+  +deleteEntidad(id: Long): void
+}
+
+class EntidadService {
+  +obtenerEntidadDTO(id: Long): EntidadDTO
+  +crearEntidad(entidadDTO: EntidadDTO): EntidadDTO
+  +actualizarEntidad(id: Long, entidadDTO: EntidadDTO): EntidadDTO
+  +eliminarEntidad(id: Long): void
+  +convertirAEntidadDTO(entidad: Entidad): EntidadDTO
+  +convertirADominio(entidadDTO: EntidadDTO): Entidad
+}
+
+class EntidadRepository {
+  +findById(id: Long): Entidad
+  +save(entidad: Entidad): Entidad
+  +update(entidad: Entidad): Entidad
+  +deleteById(id: Long): void
+}
+
+class EntidadDTO {
+  +id: Long
+  +campo1: String
+  +campo2: String
+  +EntidadDTO(id: Long, campo1: String, campo2: String)
+}
+
+class Entidad {
+  +id: Long
+  +campo1: String
+  +campo2: String
+  +Entidad(id: Long, campo1: String, campo2: String)
+}
+
+EntidadController ..> EntidadService : <<uses>>
+EntidadService ..> EntidadRepository : <<uses>>
+EntidadService ..> EntidadDTO : <<creates>>
+EntidadService ..> Entidad : <<creates>>
+EntidadRepository --> EntidadService : <<returns>>
+EntidadService --> EntidadDTO : <<returns>>
+EntidadController --> EntidadDTO : <<returns>>
+EntidadRepository --> Entidad : <<returns>>
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml sec
+
+actor Cliente
+Cliente -> EntidadController : GET /entidades/{id}
+EntidadController -> EntidadService : getEntidadDTO(id)
+EntidadService -> EntidadRepository : findById(id)
+EntidadRepository --> EntidadService : Entidad
+EntidadService -> EntidadService : transformarAEntidadDTO(entidad)
+EntidadService --> EntidadController : EntidadDTO
+EntidadController --> Cliente : EntidadDTO (JSON)
+
+@enduml
