@@ -1,6 +1,7 @@
-package com.rosalesdentalcare.dental_platform.entities;
+package com.rosalesdentalcare.dental_platform.entity;
 
 import jakarta.persistence.*;
+import java.sql.Time;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,12 +10,10 @@ import lombok.Builder;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-public class Patient {
+public class AppointmentSchedule {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPatient;
+    private Long idSchedule;
 
-    @ManyToOne
-    @JoinColumn(name = "idPerson", nullable = false)
-    private Person person;
+    private Time startTime;
+    private Time endTime;
 }
-

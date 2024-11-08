@@ -1,7 +1,7 @@
-package com.rosalesdentalcare.dental_platform.entities;
+package com.rosalesdentalcare.dental_platform.entity;
 
 import jakarta.persistence.*;
-import java.sql.Time;
+import java.math.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +10,13 @@ import lombok.Builder;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-public class AppointmentSchedule {
+public class Treatment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idSchedule;
+    private Long idTreatment;
 
-    private Time startTime;
-    private Time endTime;
+    private String treatmentName;
+    private String treatmentType;
+    private String description;
+    private BigDecimal cost;
 }
+

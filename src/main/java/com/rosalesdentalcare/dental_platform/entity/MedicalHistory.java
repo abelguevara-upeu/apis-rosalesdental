@@ -1,6 +1,7 @@
-package com.rosalesdentalcare.dental_platform.entities;
+package com.rosalesdentalcare.dental_platform.entity;
 
 import jakarta.persistence.*;
+import java.util.Date;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,16 +10,17 @@ import lombok.Builder;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-public class OdontogramDetail {
+public class MedicalHistory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idDetail;
+    private Long idHistory;
+
+    private Date creationDate;
 
     @ManyToOne
-    @JoinColumn(name = "idOdontogram", nullable = false)
-    private Odontogram odontogram;
+    @JoinColumn(name = "idPatient", nullable = false)
+    private Patient patient;
 
-    private String tooth;
-    private String toothCondition;
-    private String treatment;
+    private String allergies;
     private String observations;
 }
+

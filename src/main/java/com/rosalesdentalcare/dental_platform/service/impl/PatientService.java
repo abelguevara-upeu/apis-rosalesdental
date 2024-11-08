@@ -1,17 +1,18 @@
-package com.rosalesdentalcare.dental_platform.service;
+package com.rosalesdentalcare.dental_platform.service.impl;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.rosalesdentalcare.dental_platform.entities.Antecedent;
-import com.rosalesdentalcare.dental_platform.repository.AntecedentRepository;
+import com.rosalesdentalcare.dental_platform.entity.Patient;
+import com.rosalesdentalcare.dental_platform.repository.PatientRepository;
+import com.rosalesdentalcare.dental_platform.service.CRUDService;
 
-public class AntecedentService implements CRUDService<Antecedent, Long> {
+public class PatientService implements CRUDService<Patient, Long> {
 
     @Autowired
-    private AntecedentRepository repository;
+    private PatientRepository repository;
 
     @Override
     public void delete(Long id) {
@@ -24,17 +25,17 @@ public class AntecedentService implements CRUDService<Antecedent, Long> {
     }
 
     @Override
-    public Optional<Antecedent> getOne(Long id) {
+    public Optional<Patient> getOne(Long id) {
         return repository.findById(id);
     }
 
     @Override
-    public List<Antecedent> list() {
+    public List<Patient> list() {
         return repository.findAll();
     }
 
     @Override
-    public void save(Antecedent obj) {
+    public void save(Patient obj) {
         repository.save(obj);
     }
 }

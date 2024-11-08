@@ -1,8 +1,8 @@
 package com.rosalesdentalcare.dental_platform.config;
 
-import jakarta.persistence.*;
-import com.rosalesdentalcare.dental_platform.entities.Person;
+import com.rosalesdentalcare.dental_platform.entity.Person;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;

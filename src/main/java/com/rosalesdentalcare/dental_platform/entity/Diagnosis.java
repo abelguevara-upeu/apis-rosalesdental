@@ -1,8 +1,7 @@
-package com.rosalesdentalcare.dental_platform.entities;
+package com.rosalesdentalcare.dental_platform.entity;
 
 import jakarta.persistence.*;
 import java.util.Date;
-import java.math.BigDecimal;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,18 +10,16 @@ import lombok.Builder;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-public class VitalSigns {
+public class Diagnosis {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idVitalSign;
+    private Long idDiagnosis;
 
     @ManyToOne
     @JoinColumn(name = "idMedicalHistory", nullable = false)
     private MedicalHistory medicalHistory;
 
-    private Date measurementDate;
-    private String bloodPressure;
-    private Integer heartRate;
-    private BigDecimal temperature;
-    private Integer respiratoryRate;
+    private Date diagnosisDate;
+    private String description;
+    private String recommendations;
 }
 

@@ -1,4 +1,4 @@
-package com.rosalesdentalcare.dental_platform.entities;
+package com.rosalesdentalcare.dental_platform.entity;
 
 import jakarta.persistence.*;
 import java.util.Date;
@@ -10,17 +10,14 @@ import lombok.Builder;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-public class ClinicalExam {
+public class Odontogram {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idExam;
+    private Long idOdontogram;
 
     @ManyToOne
     @JoinColumn(name = "idMedicalHistory", nullable = false)
     private MedicalHistory medicalHistory;
 
-    private String examType;
-    private Date examDate;
-    private String findings;
-    private String recommendations;
+    private Date creationDate;
+    private String details;
 }
-
