@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.rosalesdentalcare.dental_platform.config.User;
+import com.rosalesdentalcare.dental_platform.entity.User;
 import com.rosalesdentalcare.dental_platform.repository.UserRepository;
 import com.rosalesdentalcare.dental_platform.service.CRUDService;
 
+@Service @Transactional
 public class UserService implements CRUDService<User, Long> {
 
     @Autowired

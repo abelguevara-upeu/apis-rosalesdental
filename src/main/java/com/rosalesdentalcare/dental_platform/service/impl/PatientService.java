@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.rosalesdentalcare.dental_platform.entity.Patient;
 import com.rosalesdentalcare.dental_platform.repository.PatientRepository;
 import com.rosalesdentalcare.dental_platform.service.CRUDService;
 
+@Service
 public class PatientService implements CRUDService<Patient, Long> {
 
     @Autowired
