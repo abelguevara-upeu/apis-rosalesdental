@@ -1,0 +1,148 @@
+@startuml logical_view
+/'{
+    # PRIMARY KEY
+    ~ UNIQUE (NULLABLE)
+    + NOT NULL
+    - NULLABLE
+}'/
+
+entity "Personas" as Persona {
+    #ID_Persona: INT <<PK, NOT NULL>>
+    +Nombre: VARCHAR[100] <<NOT NULL>>
+    +Primer_Apellido: VARCHAR[100] <<NOT NULL>>
+    +Segundo_Apellido: VARCHAR[100] <<NOT NULL>>
+    -Genero: CHAR[1] <<NULLABLE>>
+    -Fecha_Nacimiento: DATE <<NULLABLE>>
+    -Telefono: VARCHAR[15] <<NULLABLE>>
+    +DNI: VARCHAR[10] <<UNIQUE, NOT NULL>>
+    -Direccion: VARCHAR[255] <<NULLABLE>>
+}
+
+entity "Pacientes" as Paciente {
+    #ID_Paciente: INT <<PK, NOT NULL>>
+    #ID_Persona: INT <<FK, NOT NULL>>
+}
+
+entity "Medicos" as Medico {
+    #ID_Medico: INT <<PK, NOT NULL>>
+    #ID_Persona: INT <<FK, NOT NULL>>
+    -Especialidad: VARCHAR[100] <<NULLABLE>>
+}
+
+entity "Users" as User {
+    #ID_User: INT <<PK, NOT NULL>>
+    ~ID_Persona: INT <<FK, NULLABLE>>
+    +Username: VARCHAR[50] <<UNIQUE, NOT NULL>>
+    +Password: VARCHAR[255] <<NOT NULL>>
+    -Rol: VARCHAR[50] <<NULLABLE>>
+}
+
+entity "Consultas" as Consulta {
+    #ID_Consulta: INT <<PK, NOT NULL>>
+    +Fecha_Consulta: DATETIME <<NOT NULL>>
+    #ID_Persona: INT <<FK, NOT NULL>>
+    -Motivo: TEXT <<NULLABLE>>
+    -Detalles: TEXT <<NULLABLE>>
+}
+
+entity "SignosVitales" as SignosVitales {
+    #ID_SignoVital: INT <<PK, NOT NULL>>
+    #ID_HistorialClinico: INT <<FK, NOT NULL>>
+    +Fecha_Medicion: DATETIME <<NOT NULL>>
+    -Presion_Arterial: VARCHAR[10] <<NULLABLE>>
+    -Frecuencia_Cardiaca: INT <<NULLABLE>>
+    -Temperatura: DECIMAL[5,2] <<NULLABLE>>
+    -Frecuencia_Respiratoria: INT <<NULLABLE>>
+}
+
+entity "Antecedentes" as Antecedentes {
+    #ID_Antecedente: INT <<PK, NOT NULL>>
+    #ID_HistorialClinico: INT <<FK, NOT NULL>>
+    +Tipo: VARCHAR[50] <<NOT NULL>>
+    -Descripcion: TEXT <<NULLABLE>>
+    -Fecha: DATE <<NULLABLE>>
+}
+
+entity "HistorialesClinicos" as HistorialClinico {
+    #ID_Historial: INT <<PK, NOT NULL>>
+    +Fecha_Creacion: DATE <<NOT NULL>>
+    #ID_Paciente: INT <<FK, NOT NULL>>
+    -Alergias: TEXT <<NULLABLE>>
+    -Observaciones: TEXT <<NULLABLE>>
+}
+
+entity "ExamenesClinicos" as ExamenClinico {
+    #ID_Examen: INT <<PK, NOT NULL>>
+    #ID_HistorialClinico: INT <<FK, NOT NULL>>
+    +Tipo_Examen: VARCHAR[100] <<NOT NULL>>
+    +Fecha_Examen: DATE <<NOT NULL>>
+    -Hallazgos: TEXT <<NULLABLE>>
+    -Recomendaciones: TEXT <<NULLABLE>>
+}
+
+entity "Odontogramas" as Odontograma {
+    #ID_Odontograma: INT <<PK, NOT NULL>>
+    #ID_HistorialClinico: INT <<FK, NOT NULL>>
+    +Fecha_Creacion: DATE <<NOT NULL>>
+    -Detalles: TEXT <<NULLABLE>>
+}
+
+entity "OdontogramaDetalles" as OdontogramaDetalle {
+    #ID_Detalle: INT <<PK, NOT NULL>>
+    #ID_Odontograma: INT <<FK, NOT NULL>>
+    +Diente: VARCHAR[10] <<NOT NULL>>
+    -Estado: VARCHAR[50] <<NULLABLE>>
+    -Tratamiento: VARCHAR[100] <<NULLABLE>>
+    -Observaciones: TEXT <<NULLABLE>>
+}
+
+entity "Tratamientos" as Tratamiento {
+    #ID_Tratamiento: INT <<PK, NOT NULL>>
+    +Nombre_Tratamiento: VARCHAR[100] <<NOT NULL>>
+    +Tipo_Tratamiento: VARCHAR[50] <<NOT NULL>>
+    -Descripcion: TEXT <<NULLABLE>>
+    -Costo: DECIMAL[10,2] <<NULLABLE>>
+}
+
+entity "HorariosDeCita" as HorarioCita {
+    #ID_Horario: INT <<PK, NOT NULL>>
+    +Hora_Inicio: TIME <<NOT NULL>>
+    +Hora_Fin: TIME <<NOT NULL>>
+}
+
+entity "Citas" as Cita {
+    #ID_Cita: INT <<PK, NOT NULL>>
+    +Fecha_Cita: DATE <<NOT NULL>>
+    #ID_Paciente: INT <<FK, NOT NULL>>
+    #ID_Tratamiento: INT <<FK, NOT NULL>>
+    #ID_Horario: INT <<FK, NOT NULL>>
+    #ID_Medico: INT <<FK, NOT NULL>>
+    -Notas: TEXT <<NULLABLE>>
+}
+
+entity "Diagnosticos" as Diagnostico {
+    #ID_Diagnostico: INT <<PK, NOT NULL>>
+    +Fecha_Diagnostico: DATE <<NOT NULL>>
+    #ID_HistorialClinico: INT <<FK, NOT NULL>>
+    +Descripcion: TEXT <<NOT NULL>>
+    -Recomendaciones: TEXT <<NULLABLE>>
+}
+
+/' Relaciones entre las entidades'/
+Persona ||--o{ Paciente : es
+Persona ||--o{ Medico : es
+Persona ||--o{ User : es
+Persona ||--o{ Consulta : realiza
+Paciente ||--|{ HistorialClinico : tiene
+HistorialClinico ||--o{ SignosVitales : registra
+HistorialClinico ||--o{ Antecedentes : contiene
+HistorialClinico ||--o{ ExamenClinico : incluye
+HistorialClinico ||--o{ Odontograma : contiene
+Odontograma ||--o{ OdontogramaDetalle : tiene
+HistorialClinico ||--o{ Cita : registra
+Cita }o--|| Tratamiento : aplica
+Paciente ||--o{ Cita : asiste a
+HistorialClinico ||--o{ Diagnostico : contiene
+HorarioCita ||--o{ Cita : en
+Medico ||--o{ Cita : atiende
+@enduml

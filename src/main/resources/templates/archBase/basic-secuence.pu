@@ -1,4 +1,4 @@
-@startuml sec
+@startuml secuences
 
 actor Cliente
 Cliente -> EntidadController : GET /entidades/{id}

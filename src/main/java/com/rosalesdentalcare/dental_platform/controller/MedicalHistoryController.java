@@ -9,62 +9,74 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.rosalesdentalcare.dental_platform.dto.ApiResponse;
-import com.rosalesdentalcare.dental_platform.dto.UserDTO;
-import com.rosalesdentalcare.dental_platform.entity.User;
-import com.rosalesdentalcare.dental_platform.service.impl.UserService;
+import com.rosalesdentalcare.dental_platform.dto.MedicalHistoryDTO;
+import com.rosalesdentalcare.dental_platform.entity.MedicalHistory;
+import com.rosalesdentalcare.dental_platform.entity.Patient;
+import com.rosalesdentalcare.dental_platform.service.impl.MedicalHistoryService;
+import com.rosalesdentalcare.dental_platform.service.impl.PatientService;
 
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/medicalHistories")
+public class MedicalHistoryController {
 
-    @Autowired private UserService service;
+    @Autowired private MedicalHistoryService service;
+    @Autowired private PatientService patientService;
     @Autowired private ModelMapper mapper;
 
     @GetMapping("/getAll")
-    public ResponseEntity<ApiResponse<List<User>>> list () {
-        List<User> list = service.list();
-        ApiResponse<List<User>> response = new ApiResponse<>(true, "Lista de usuarios obtenida exitosamente", list);
+    public ResponseEntity<ApiResponse<List<MedicalHistory>>> list () {
+        List<MedicalHistory> list = service.list();
+        ApiResponse<List<MedicalHistory>> response = new ApiResponse<>(true, "Lista de usuarios obtenida exitosamente", list);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
-    public ResponseEntity<ApiResponse<User>> getById (@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<MedicalHistory>> getById (@PathVariable("id") Long id) {
         if (!service.existsById(id)) {
-            ApiResponse<User> response = new ApiResponse<>(false, "Usuario no encontrado", null);
+            ApiResponse<MedicalHistory> response = new ApiResponse<>(false, "Usuario no encontrado", null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-        User obj = service.getOne(id).get();
-        ApiResponse<User> response = new ApiResponse<>(true, "Usuario encontrado", obj);
+        MedicalHistory obj = service.getOne(id).get();
+        ApiResponse<MedicalHistory> response = new ApiResponse<>(true, "Usuario encontrado", obj);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Object>> create (@RequestBody UserDTO dto) {
-        if (Optional.ofNullable(dto).isEmpty()) {
+    public ResponseEntity<ApiResponse<Object>> create(@RequestBody MedicalHistoryDTO dto) {
+        if (dto == null) {
             ApiResponse<Object> response = new ApiResponse<>(false, "Los campos son obligatorios", null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        // Convertir el DTO a entidad usando ModelMapper
-        User obj = mapper.map(dto, User.class);
-        service.save(obj);
+
+        // Convertir el DTO a entidad usando ModelMapper (sin el paciente)
+        MedicalHistory medicalHistory = mapper.map(dto, MedicalHistory.class);
+
+        // Asignar el paciente usando el servicio, si `patientId` no es nulo
+        if (dto.getPatientId() != null) {
+            Patient patient = patientService.getOne(dto.getPatientId()).get();
+            medicalHistory.setPatient(patient);
+        }
+
+        // Guardar el historial médico con el paciente asignado
+        service.save(medicalHistory);
         ApiResponse<Object> response = new ApiResponse<>(true, "Usuario creado exitosamente", null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse<Object>> update (@PathVariable("id") Long id, @RequestBody UserDTO dto) {
+    public ResponseEntity<ApiResponse<Object>> update (@PathVariable("id") Long id, @RequestBody MedicalHistoryDTO dto) {
         if (!service.existsById(id)) {
             ApiResponse<Object> response = new ApiResponse<>(false, "Usuario no encontrado", null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
         // Buscar el usuario existente
-        User obj = service.getOne(id).get();
+        MedicalHistory obj = service.getOne(id).get();
 
         // Mapear el DTO al usuario existente, actualizando solo los campos que están en el DTO
         mapper.map(dto, obj);
 
         // Asegurarnos de que el id del usuario no se sobrescriba (ya que es una entidad existente)
-        obj.setIdUser(id);
+        obj.setIdHistory(id);
 
         // Guardar el usuario actualizado
         service.save(obj);
