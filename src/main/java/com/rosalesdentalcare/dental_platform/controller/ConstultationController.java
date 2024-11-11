@@ -75,6 +75,15 @@ public class ConstultationController {
         // Mapear el DTO al usuario existente, actualizando solo los campos que están en el DTO
         mapper.map(dto, obj);
 
+        if (dto.getPersonId()!= null) {
+            Optional<Person> personOpt = personService.getOne(id);
+            if (personOpt.isPresent()){
+                obj.setPerson(personOpt.get());
+            } else {
+                ApiResponse<Object> response = new ApiResponse<>(false, "Persona no encontrada", null);
+            }
+        }
+
         // Asegurarnos de que el id del usuario no se sobrescriba (ya que es una entidad existente)
         obj.setIdConsultation(id);
 
