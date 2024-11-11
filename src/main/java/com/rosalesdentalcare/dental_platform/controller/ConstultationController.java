@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import com.rosalesdentalcare.dental_platform.dto.ApiResponse;
 import com.rosalesdentalcare.dental_platform.dto.ConsultationDTO;
 import com.rosalesdentalcare.dental_platform.entity.Consultation;
+import com.rosalesdentalcare.dental_platform.entity.Person;
 import com.rosalesdentalcare.dental_platform.service.impl.ConsultationService;
+import com.rosalesdentalcare.dental_platform.service.impl.PersonService;
 
 @RestController
 @RequestMapping("/api/consultations")
 public class ConstultationController {
 
     @Autowired private ConsultationService service;
+    @Autowired private PersonService personService;
     @Autowired private ModelMapper mapper;
 
     @GetMapping("/getAll")
@@ -46,6 +49,15 @@ public class ConstultationController {
         }
         // Convertir el DTO a entidad usando ModelMapper
         Consultation obj = mapper.map(dto, Consultation.class);
+
+        if (dto.getPersonId()!= null) {
+            Optional<Person> personOpt = personService.getOne(dto.getPersonId());
+            if (personOpt.isPresent()){
+                obj.setPerson(personOpt.get());
+            } else {
+                ApiResponse<Object> response = new ApiResponse<>(false, "Persona no encontrada", null);
+            }
+        }
         service.save(obj);
         ApiResponse<Object> response = new ApiResponse<>(true, "Usuario creado exitosamente", null);
         return new ResponseEntity<>(response, HttpStatus.OK);
