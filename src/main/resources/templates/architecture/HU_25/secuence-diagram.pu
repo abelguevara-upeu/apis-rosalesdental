@@ -1,0 +1,50 @@
+@startuml test
+
+actor Cliente
+
+' --- GET /entidades/{id} ---
+Cliente -> EntidadController : getEntidadById(id)
+EntidadController -> EntidadService : obtenerEntidadDTO(id)
+EntidadService -> EntidadRepository : findById(id)
+EntidadRepository --> EntidadService : entidad
+EntidadService -> EntidadService : convertirAEntidadDTO(entidad)
+EntidadService -> EntidadDTO : new()
+EntidadDTO --> EntidadService : entidadDTO
+EntidadService --> EntidadController : return entidadDTO
+EntidadController --> Cliente : return entidadDTO (JSON)
+
+' --- POST /entidades ---
+Cliente -> EntidadController : createEntidad(entidadDTO)
+EntidadController -> EntidadService : crearEntidad(entidadDTO)
+EntidadService -> EntidadService : convertirADominio(entidadDTO)
+EntidadService -> Entidad : new()
+EntidadService -> EntidadRepository : save(entidad)
+EntidadRepository --> EntidadService : entidad
+EntidadService -> EntidadService : convertirAEntidadDTO(entidad)
+EntidadService --> EntidadController : return entidadDTO
+EntidadController --> Cliente : return entidadDTO (JSON)
+
+' --- PUT /entidades/{id} ---
+Cliente -> EntidadController : updateEntidad(id, entidadDTO)
+EntidadController -> EntidadService : actualizarEntidad(id, entidadDTO)
+EntidadService -> EntidadRepository : findById(id)
+EntidadRepository --> EntidadService : entidad
+EntidadService -> EntidadService : convertirAEntidadDTO(entidad)
+EntidadService -> EntidadDTO : new()
+EntidadDTO --> EntidadService : entidadDTO
+EntidadService -> EntidadService : convertirADominio(entidadDTO)
+EntidadService -> EntidadRepository : update(entidad)
+EntidadRepository --> EntidadService : entidad
+EntidadService -> EntidadService : convertirAEntidadDTO(entidad)
+EntidadService --> EntidadController : return entidadDTO
+EntidadController --> Cliente : return entidadDTO (JSON)
+
+' --- DELETE /entidades/{id} ---
+Cliente -> EntidadController : deleteEntidad(id)
+EntidadController -> EntidadService : eliminarEntidad(id)
+EntidadService -> EntidadRepository : deleteById(id)
+EntidadRepository --> EntidadService : void
+EntidadService --> EntidadController : void
+EntidadController --> Cliente : 204 No Content
+
+@enduml

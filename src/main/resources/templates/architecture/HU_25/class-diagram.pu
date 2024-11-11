@@ -1,0 +1,54 @@
+@startuml test
+
+class ConsultationController {
+  +getEntidadById(id: Long): ConsulationDTO
+  +createEntidad(entidadDTO: ConsulationDTO): ConsulationDTO
+  +updateEntidad(id: Long, entidadDTO: ConsulationDTO): ConsulationDTO
+  +deleteEntidad(id: Long): void
+}
+
+class ConsultationService {
+  +obtenerEntidadDTO(id: Long): ConsulationDTO
+  +crearEntidad(entidadDTO: ConsulationDTO): ConsulationDTO
+  +actualizarEntidad(id: Long, entidadDTO: ConsulationDTO): ConsulationDTO
+  +eliminarEntidad(id: Long): void
+  +convertirAEntidadDTO(entidad: Consultation): ConsulationDTO
+  +convertirADominio(entidadDTO: ConsulationDTO): Consultation
+}
+
+class ConsultationRepository {
+  +findById(id: Long): Consultation
+  +save(entidad: Consultation): Consultation
+  +update(entidad: Consultation): Consultation
+  +deleteById(id: Long): void
+  +findByState
+}
+
+class ConsultationDTO {
+  -Long idConsultation
+  -Date consultationDate
+  -Long personId
+  -String reason
+  -String details
+  @lombok
+}
+
+class  Consultation {
+  -Long idConsultation
+  -Date consultationDate
+  -Person person
+  -String reason
+  -String details
+  @lombok
+}
+
+ConsultationController ..> ConsultationService : <<uses>>
+ConsultationService ..> ConsultationRepository : <<uses>>
+ConsultationService ..> ConsulationDTO : <<creates>>
+ConsultationService ..> Consultation : <<creates>>
+ConsultationRepository --> ConsultationService : <<returns>>
+ConsultationService --> ConsulationDTO : <<returns>>
+ConsultationController --> ConsulationDTO : <<returns>>
+ConsultationRepository --> Consultation : <<returns>>
+
+@enduml

@@ -17,7 +17,7 @@ import com.rosalesdentalcare.dental_platform.service.impl.PersonService;
 
 @RestController
 @RequestMapping("/api/consultations")
-public class ConstultationController {
+public class ConsultationController {
 
     @Autowired private ConsultationService service;
     @Autowired private PersonService personService;
