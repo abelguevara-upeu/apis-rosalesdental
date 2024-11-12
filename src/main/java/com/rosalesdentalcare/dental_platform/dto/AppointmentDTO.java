@@ -13,4 +13,5 @@ public class AppointmentDTO {
     private Long scheduleId;
     private Long doctorId;
     private String notes;
+    private String state;
 }

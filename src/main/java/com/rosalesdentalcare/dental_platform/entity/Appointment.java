@@ -32,5 +32,6 @@ public class Appointment {
     private Doctor doctor;
 
     private String notes;
+    private String state;
 }
 

@@ -1,0 +1,59 @@
+@startuml Consultation
+
+actor Cliente
+entity DispatcherSpring
+
+'--- GET /api/consultation/ ---
+Cliente -> DispatcherSpring : [GET /getAll/{id}]
+DispatcherSpring -> ConsultationController : list()
+ConsultationController -> ConsultationService : list()
+ConsultationService -> ConsultationRepository : findById(id): List
+ConsultationRepository -> Consultation : new()
+ConsultationRepository --> ConsultationService : return List<Consultation>
+ConsultationService --> ConsultationController : return List<Consultation>
+ConsultationController --> DispatcherSpring : return ResponseEntity(List<Consultation>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Consultations
+
+'--- GET /api/consultation/ ---
+Cliente -> DispatcherSpring : [GET /getOne/{id}]
+DispatcherSpring -> ConsultationController : getById(id)
+ConsultationController -> ConsultationService : getOne(id)
+ConsultationService -> ConsultationRepository : findById(id)
+ConsultationRepository -> Consultation : new()
+ConsultationRepository --> ConsultationService : return Consultation
+ConsultationService --> ConsultationController : return Consultation
+ConsultationController --> DispatcherSpring : return ResponseEntity(Consultation)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Consultation
+
+' --- POST /api/consultation/ ---
+Cliente -> DispatcherSpring : [POST /create]
+DispatcherSpring -> ConsultationController : create(consultationDTO)
+ConsultationController -> ConsultationController: Mapper DTO to Consultation
+ConsultationController -> ConsultationService : save(consultation)
+ConsultationService -> ConsultationRepository : save(consultation)
+ConsultationRepository -> ConsultationService : void
+ConsultationService -> ConsultationController : void
+ConsultationController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Consultation
+
+' --- POST /api/consultation/ ---
+Cliente -> DispatcherSpring : [PUT /create]
+DispatcherSpring -> ConsultationController : update(consultationDTO)
+ConsultationController -> ConsultationController: Mapper DTO to Consultation
+ConsultationController -> ConsultationService : save(consultation)
+ConsultationService -> ConsultationRepository : save(consultation)
+ConsultationRepository -> ConsultationService : void
+ConsultationService -> ConsultationController : void
+ConsultationController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Consultation
+
+' --- DELETE /api/consultation/ ---
+Cliente -> DispatcherSpring : [DELETE /delete/{id}]
+DispatcherSpring -> ConsultationController: delete(id)
+ConsultationController -> ConsultationService : delete(id)
+ConsultationService -> ConsultationRepository : deleteById(id)
+ConsultationRepository --> ConsultationService : void
+ConsultationService --> ConsultationController : void
+ConsultationController --> Cliente : HTTP 204 No Content
+
+@enduml

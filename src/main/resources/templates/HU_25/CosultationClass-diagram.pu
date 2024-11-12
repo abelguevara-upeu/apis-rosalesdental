@@ -1,0 +1,94 @@
+@startuml Consultation
+
+package conntroller {
+  class ConsultationController {
+    service: ConsultationService
+    personService: ConsultationService
+    +list(): List<Consultation>
+    +getById(id: Long): Consultation
+    +create(obj: ConsultationDTO): void
+    +update(id: Long, obj: ConsultationDTO): void
+    +delete(id: Long): void
+  }
+}
+
+package service {
+  interface CRUDService{
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+
+  class ConsultationService {
+    +list(): List<Consultation>
+    +getOne(id: Long): Consultation
+    +save(obj: Consultation): Consultation
+    +delete(id: Long): void
+    +existsById(id: Long): boolean
+  }
+}
+
+package repository {
+
+  class ConsultationRepository {}
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package dto {
+  class ConsultationDTO {
+    -idConsultation: Long
+    -consultationDate: Date
+    -personId: Long
+    -reason: String
+    -details: String
+    -state: String
+    @lombok
+  }
+}
+
+package entity {
+
+  class Consultation {
+    -idConsultation: Long
+    -consultationDate: Date
+    -person: Person
+    -reason: String
+    -details: String
+    -state: String
+    @lombok
+  }
+
+  class Person {
+    idPerson: Long
+    firstName: String
+    lastNameFather: String
+    lastNameMother: String
+    gender: Character
+    birthDate: Date
+    phone: String
+    dni: String
+    address: String
+    @lombok
+  }
+}
+
+ConsultationController ..> ConsultationService : <<uses>>
+ConsultationController --> ConsultationDTO : Receives as @RequestBody
+ConsultationController ..> Consultation : <<creates>>
+
+ConsultationService..> ConsultationController: <<returns>>
+ConsultationService --|> CRUDService
+ConsultationService ..> ConsultationRepository : <<uses>>
+
+ConsultationRepository --> ConsultationService : <<returns>>
+ConsultationRepository --> Consultation : <<returns>>
+ConsultationRepository --|> JpaRepository: <<implements>>
+
+Consultation }o--|| Person
+
+@enduml
