@@ -2,6 +2,8 @@ package com.rosalesdentalcare.dental_platform.entity;
 import jakarta.persistence.*;
 import java.util.Date;
 
+import javax.print.DocFlavor.STRING;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -32,5 +34,6 @@ public class Appointment {
     private Doctor doctor;
 
     private String notes;
+    private String state;
 }
 

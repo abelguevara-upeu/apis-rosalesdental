@@ -14,6 +14,7 @@ import com.rosalesdentalcare.dental_platform.entity.Patient;
 import com.rosalesdentalcare.dental_platform.service.impl.PatientService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/patients")
 public class PatientController {
 

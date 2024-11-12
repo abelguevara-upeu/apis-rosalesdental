@@ -15,6 +15,7 @@ import com.rosalesdentalcare.dental_platform.service.impl.MedicalHistoryService;
 import com.rosalesdentalcare.dental_platform.service.impl.PatientService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/medicalHistories")
 public class MedicalHistoryController {
 
