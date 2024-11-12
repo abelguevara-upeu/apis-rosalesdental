@@ -1,0 +1,82 @@
+@startuml hu25
+package repository {
+  interface DoctorRepository {
+  }
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package controller {
+  class DoctorController {
+    +list(): List<Doctor>
+    +getById(id: Long): Doctor
+    +create(obj: DoctorDTO): void
+    +update(id: Long, obj: DoctorDTO): void
+    +delete(id: Long): void
+  }
+}
+
+package service {
+
+  class DoctorService {
+    +list(): List<Doctor>
+    +getOne(id: Long): Doctor
+    +save(obj: Doctor): Doctor
+    +delete(id: Long): void
+    +existsById(id: Long): boolean
+
+  }
+
+  interface CRUDService{
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+}
+
+package dto {
+  class DoctorDTO {
+    -idDoctor: Long
+    -personId: Long
+    -specialty: String
+    @lombok
+  }
+}
+
+package entity {
+  class Doctor {
+    -idDoctor: Long
+    -person: Person
+    -specialty: String
+    @lombok
+  }
+  class Person {
+    -idPerson: Long
+    -firstName: String
+    -lastNameFather: String
+    -lastNameMother: String
+    -gender: Character
+    -birthDate: Date
+    -phone: String
+    -dni: String
+    -address: String
+    @lombok
+  }
+}
+
+DoctorController ..> DoctorService : <<uses>>
+DoctorController --> DoctorDTO : Receives as @RequestBody
+DoctorController ..> Doctor : <<creates>>
+
+DoctorService..> DoctorController: <<returns>>
+DoctorService --|> CRUDService
+DoctorService ..> DoctorRepository : <<uses>>
+
+DoctorRepository --> DoctorService : <<returns>>
+DoctorRepository --> Doctor : <<returns>>
+DoctorRepository --|> JpaRepository: <<implements>>
+@enduml

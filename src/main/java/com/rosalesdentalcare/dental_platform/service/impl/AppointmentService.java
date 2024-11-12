@@ -1,6 +1,7 @@
 package com.rosalesdentalcare.dental_platform.service.impl;
 
 import java.util.List;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,13 @@ public class AppointmentService implements CRUDService<Appointment, Long> {
     @Override
     public void save(Appointment obj) {
         repository.save(obj);
+    }
+
+    public List<Appointment> filterByDate(Date date) {
+        return repository.findByAppointmentDate(date);
+    }
+
+    public List<Appointment> filterByState(String state) {
+        return repository.findByState(state);
     }
 }

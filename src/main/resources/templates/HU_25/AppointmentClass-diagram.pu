@@ -70,6 +70,7 @@ package entity {
   class Patient {
     idPatient: Long
     person: Person
+    @lombok
   }
 
   class Treatment {
@@ -78,6 +79,7 @@ package entity {
     -treatmentType: String
     -description: String
     -cost: String
+    @lombok
   }
 
   class AppointmentSchedule {
@@ -89,6 +91,7 @@ package entity {
     idDoctor: Long
     personId: Long
     specialty: String
+    @lombok
   }
 
 }

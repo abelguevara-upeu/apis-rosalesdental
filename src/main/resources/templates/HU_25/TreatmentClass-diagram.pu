@@ -1,0 +1,89 @@
+@startuml hu25
+package repository {
+  interface TreatmentRepository {
+  }
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package controller {
+  class TreatmentController {
+    +list(): List<Treatment>
+    +getById(id: Long): Treatment
+    +create(obj: TreatmentDTO): void
+    +update(id: Long, obj: TreatmentDTO): void
+    +delete(id: Long): void
+  }
+}
+
+package service {
+
+  class PersonService {
+    +list(): List<Treatment>
+    +getOne(id: Long): Treatment
+    +save(obj: Treatment): Treatment
+    +delete(id: Long): void
+    +existsById(id: Long): boolean
+
+  }
+
+  interface CRUDService{
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+}
+
+package dto {
+  class TreatmentDTO {
+    -idPerson: Long
+    -firstName: String
+    -lastNameFather: String
+    -lastNameMother: String
+    -gender: Character
+    -birthDate: Date
+    -phone: String
+    -dni: String
+    -address: String
+    -@lombok
+  }
+}
+
+package entity {
+  class Appointment {
+    -idAppointment: Long
+    -appointmentDate: Date
+    -patient: Patient
+    -treatment: Treatment
+    -schedule: AppointmentSchedule
+    -doctor: Doctor
+    -notes: String
+    @lombok
+  }
+
+  class Treatment {
+    -idTreatment: Long
+    -treatmentName: String
+    -treatmentType: String
+    -description: String
+    -cost: BigDecimal
+    @lombok
+  }
+}
+
+TreatmentController ..> PersonService : <<uses>>
+TreatmentController --> TreatmentDTO : Receives as @RequestBody
+TreatmentController ..> Treatment : <<creates>>
+
+PersonService..> TreatmentController: <<returns>>
+PersonService --|> CRUDService
+PersonService ..> TreatmentRepository : <<uses>>
+
+TreatmentRepository --> PersonService : <<returns>>
+TreatmentRepository --> Treatment : <<returns>>
+TreatmentRepository --|> JpaRepository: <<implements>>
+@enduml
