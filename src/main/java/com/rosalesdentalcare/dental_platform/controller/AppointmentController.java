@@ -2,10 +2,14 @@ package com.rosalesdentalcare.dental_platform.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +25,6 @@ import com.rosalesdentalcare.dental_platform.service.impl.PatientService;
 import com.rosalesdentalcare.dental_platform.service.impl.DoctorService;
 import com.rosalesdentalcare.dental_platform.service.impl.TreatmentService;
 import com.rosalesdentalcare.dental_platform.service.impl.AppointmentScheduleService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -154,6 +156,8 @@ public class AppointmentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    //
+
     @GetMapping("/filterState/{state}")
     public ResponseEntity<ApiResponse<List<Appointment>>> filterByState(@PathVariable("state") String state) {
         List<Appointment> list = appointmentService.filterByState(state);
@@ -162,8 +166,21 @@ public class AppointmentController {
     }
 
     @GetMapping("/filterDate/{date}")
-    public ResponseEntity<ApiResponse<List<Appointment>>> filterByDate(@PathVariable("date") Date date) {
+        public ResponseEntity<ApiResponse<List<Appointment>>> filterByDate(
+            @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dt) {
+
+        // Convertir la fecha de entrada a UTC (si es necesario)
+        ZoneId utcZone = ZoneId.of("UTC");
+        Date date = Date.from(dt.atZone(utcZone).toInstant());
+
         List<Appointment> list = appointmentService.filterByDate(date);
+
+        // Convertir las fechas de las citas de UTC a la zona horaria de Lima
+        for (Appointment appointment : list) {
+            ZonedDateTime limaTime = ZonedDateTime.ofInstant(appointment.getAppointmentDate().toInstant(), ZoneId.of("America/Lima"));
+            appointment.setAppointmentDate(Date.from(limaTime.toInstant()));
+        }
+
         ApiResponse<List<Appointment>> response = new ApiResponse<>(true, "Lista de citas obtenida exitosamente", list);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
