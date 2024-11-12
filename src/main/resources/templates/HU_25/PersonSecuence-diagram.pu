@@ -1,0 +1,59 @@
+@startuml test
+
+actor Cliente
+entity DispatcherSpring
+
+'--- GET /api/patients/ ---
+Cliente -> DispatcherSpring : [GET /getAll/{id}]
+DispatcherSpring -> PersonController : list()
+PersonController -> PersonService : list()
+PersonService -> PersonRepository : findById(id): List
+PersonRepository -> Person : new()
+PersonRepository --> PersonService : return List<Person>
+PersonService --> PersonController : return List<Person>
+PersonController --> DispatcherSpring : return ResponseEntity(List<Person>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Persons
+
+'--- GET /api/patients/ ---
+Cliente -> DispatcherSpring : [GET /getOne/{id}]
+DispatcherSpring -> PersonController : getById(id)
+PersonController -> PersonService : getOne(id)
+PersonService -> PersonRepository : findById(id)
+PersonRepository -> Person : new()
+PersonRepository --> PersonService : return Person
+PersonService --> PersonController : return Person
+PersonController --> DispatcherSpring : return ResponseEntity(Person)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Person
+
+' --- POST /api/patients/ ---
+Cliente -> DispatcherSpring : [POST /create]
+DispatcherSpring -> PersonController : create(patientDTO)
+PersonController -> PersonController: Mapper DTO to Person
+PersonController -> PersonService : save(consultation)
+PersonService -> PersonRepository : save(consultation)
+PersonRepository -> PersonService : void
+PersonService -> PersonController : void
+PersonController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Person
+
+' --- POST /api/patients/ ---
+Cliente -> DispatcherSpring : [PUT /create]
+DispatcherSpring -> PersonController : update(patientDTO)
+PersonController -> PersonController: Mapper DTO to Person
+PersonController -> PersonService : save(consultation)
+PersonService -> PersonRepository : save(consultation)
+PersonRepository -> PersonService : void
+PersonService -> PersonController : void
+PersonController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Person
+
+' --- DELETE /api/patients/ ---
+Cliente -> DispatcherSpring : [DELETE /delete/{id}]
+DispatcherSpring -> PersonController: delete(id)
+PersonController -> PersonService : delete(id)
+PersonService -> PersonRepository : deleteById(id)
+PersonRepository --> PersonService : void
+PersonService --> PersonController : void
+PersonController --> Cliente : HTTP 204 No Content
+
+@enduml

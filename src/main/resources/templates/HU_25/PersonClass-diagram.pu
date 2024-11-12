@@ -1,0 +1,82 @@
+@startuml hu25
+package repository {
+  interface PersonRepository {
+  }
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package controller {
+  class PersonController {
+    +list(): List<Person>
+    +getById(id: Long): Person
+    +create(obj: PersonDTO): void
+    +update(id: Long, obj: PersonDTO): void
+    +delete(id: Long): void
+  }
+}
+
+package service {
+
+  class PersonService {
+    +list(): List<Person>
+    +getOne(id: Long): Person
+    +save(obj: Person): Person
+    +delete(id: Long): void
+    +existsById(id: Long): boolean
+
+  }
+
+  interface CRUDService{
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+}
+
+package dto {
+  class PersonDTO {
+    -idPerson: Long
+    -firstName: String
+    -lastNameFather: String
+    -lastNameMother: String
+    -gender: Character
+    -birthDate: Date
+    -phone: String
+    -dni: String
+    -address: String
+    -@lombok
+  }
+}
+
+package entity {
+  class Person {
+    -idPerson: Long
+    -firstName: String
+    -lastNameFather: String
+    -lastNameMother: String
+    -gender: Character
+    -birthDate: Date
+    -phone: String
+    -dni: String
+    -address: String
+    @lombok
+  }
+}
+
+PersonController ..> PersonService : <<uses>>
+PersonController --> PersonDTO : Receives as @RequestBody
+PersonController ..> Person : <<creates>>
+
+PersonService..> PersonController: <<returns>>
+PersonService --|> CRUDService
+PersonService ..> PersonRepository : <<uses>>
+
+PersonRepository --> PersonService : <<returns>>
+PersonRepository --> Person : <<returns>>
+PersonRepository --|> JpaRepository: <<implements>>
+@enduml
