@@ -1,6 +1,7 @@
 @startuml test
 
 class EntidadController {
+  +getAllEntidad(): List<Entidad>
   +getEntidadById(id: Long): EntidadDTO
   +createEntidad(entidadDTO: EntidadDTO): EntidadDTO
   +updateEntidad(id: Long, entidadDTO: EntidadDTO): EntidadDTO
