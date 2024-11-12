@@ -2,6 +2,7 @@ package com.rosalesdentalcare.dental_platform.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import com.rosalesdentalcare.dental_platform.service.impl.PatientService;
 import com.rosalesdentalcare.dental_platform.service.impl.DoctorService;
 import com.rosalesdentalcare.dental_platform.service.impl.TreatmentService;
 import com.rosalesdentalcare.dental_platform.service.impl.AppointmentScheduleService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/appointments")
@@ -147,6 +151,20 @@ public class AppointmentController {
         }
         appointmentService.delete(id);
         ApiResponse<Object> response = new ApiResponse<>(true, "Cita eliminada exitosamente", null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/filterState/{state}")
+    public ResponseEntity<ApiResponse<List<Appointment>>> filterByState(@PathVariable("state") String state) {
+        List<Appointment> list = appointmentService.filterByState(state);
+        ApiResponse<List<Appointment>> response = new ApiResponse<>(true, "Lista de citas obtenida exitosamente", list);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/filterDate/{date}")
+    public ResponseEntity<ApiResponse<List<Appointment>>> filterByDate(@PathVariable("date") Date date) {
+        List<Appointment> list = appointmentService.filterByDate(date);
+        ApiResponse<List<Appointment>> response = new ApiResponse<>(true, "Lista de citas obtenida exitosamente", list);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

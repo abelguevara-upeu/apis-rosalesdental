@@ -42,6 +42,8 @@ public class AppointmentService implements CRUDService<Appointment, Long> {
         repository.save(obj);
     }
 
+    //
+
     public List<Appointment> filterByDate(Date date) {
         return repository.findByAppointmentDate(date);
     }
