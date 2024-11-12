@@ -54,8 +54,6 @@ public class ConsultationController {
             Optional<Person> personOpt = personService.getOne(dto.getPersonId());
             if (personOpt.isPresent()){
                 obj.setPerson(personOpt.get());
-            } else {
-                ApiResponse<Object> response = new ApiResponse<>(false, "Persona no encontrada", null);
             }
         }
         service.save(obj);
