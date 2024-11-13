@@ -1,0 +1,127 @@
+@startuml MedicalHistory
+
+package controller {
+
+  class MedicalHistoryController {
+    -service: MedicalHistoryService
+    -patientService: PatientService
+    +list(): List<MedicalHistory>
+    +getById(id: Long): MedicalHistory
+    +create(obj: MedicalHistoryDTO): void
+    +update(id: Long, obj: MedicalHistoryDTO): void
+    +delete(id: Long): void
+  }
+}
+
+package service {
+
+  interface CRUDService {
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+
+  class MedicalHistoryService {
+    +list(): List<MedicalHistory>
+    +getOne(id: Long): MedicalHistory
+    +save(obj: MedicalHistory): MedicalHistory
+    +delete(id: Long): void
+    +existsById(id: Long): boolean
+  }
+}
+
+package repository {
+
+  class MedicalHistoryRepository {}
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package dto {
+
+  class MedicalHistoryDTO {
+    -idHistory: Long
+    -creationDate: Date
+    -patientId: Long
+    -allergies: String
+    -observations: String
+    @lombok
+  }
+}
+
+package entity {
+
+  class MedicalHistory {
+    -idHistory: Long
+    -creationDate: Date
+    -patient: Patient
+    -allergies: String
+    -observations: String
+    @lombok
+  }
+
+  class Patient {
+    -idPatient: Long
+    -personId: Long
+    @lombok
+  }
+
+  class VitalSigns {
+    -idVitalSign: Long
+    -medicalHistoryId: Long
+    -measurementDate: Date
+    -bloodPressure: String
+    -heartRate: Integer
+    -temperature: BigDecimal
+    -respiratoryRate: Integer
+    @lombok
+  }
+
+  class Diagnosis {
+    -idDiagnosis: Long
+    -medicalHistoryId: Long
+    -diagnosisDate: Date
+    -description: String
+    -recommendations: String
+    @lombok
+  }
+
+  class ClinicalExam {
+    -idExam: Long
+    -medicalHistoryId: Long
+    -examType: String
+    -examDate: Date
+    -findings: String
+    -recommendations: String
+    @lombok
+  }
+
+  class Antecedent {
+    -idAntecedent: Long
+    -medicalHistoryId: Long
+    -type: String
+    -description: String
+    -date: Date
+    @lombok
+  }
+}
+
+MedicalHistoryController ..> MedicalHistoryService : <<uses>>
+MedicalHistoryController --> MedicalHistoryDTO : Receives as @RequestBody
+MedicalHistoryController ..> MedicalHistory : <<creates>>
+
+MedicalHistoryService..> MedicalHistoryController: <<returns>>
+MedicalHistoryService --|> CRUDService: <<implements>>
+MedicalHistoryService ..> MedicalHistoryRepository : <<uses>>
+
+MedicalHistoryRepository --> MedicalHistoryService : <<returns>>
+MedicalHistoryRepository --> MedicalHistory : <<returns>>
+MedicalHistoryRepository --|> JpaRepository: <<implements>>
+
+MedicalHistory }o--|| Patient
+
+@enduml

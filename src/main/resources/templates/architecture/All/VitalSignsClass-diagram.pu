@@ -1,0 +1,95 @@
+@startuml VitalSigns
+
+package controller {
+
+  class VitalSignsController {
+    -service: VitalSignsService
+    -medicalHistoryService: MedicalHistoryService
+    +list(): List<VitalSigns>
+    +getById(id: Long): VitalSigns
+    +create(obj: VitalSignsDTO): void
+    +update(id: Long, obj: VitalSignsDTO): void
+    +delete(id: Long): void
+  }
+}
+
+package service {
+
+  interface CRUDService {
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+
+  class VitalSignsService {
+    +list(): List<VitalSigns>
+    +getOne(id: Long): VitalSigns
+    +save(obj: VitalSigns): VitalSigns
+    +delete(id: Long): void
+    +existsById(id: Long): boolean
+  }
+}
+
+package repository {
+
+  class VitalSignsRepository {}
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package dto {
+
+    class VitalSignsDTO {
+    -idVitalSign: Long
+    -medicalHistoryId: Long
+    -measurementDate: Date
+    -bloodPressure: String
+    -heartRate: Integer
+    -temperature: BigDecimal
+    -respiratoryRate: Integer
+    @lombok
+  }
+}
+
+package entity {
+
+  class VitalSigns {
+    -idVitalSign: Long
+    -medicalHistoryId: Long
+    -measurementDate: Date
+    -bloodPressure: String
+    -heartRate: Integer
+    -temperature: BigDecimal
+    -respiratoryRate: Integer
+    @lombok
+  }
+
+   class MedicalHistory {
+    -idHistory: Long
+    -creationDate: Date
+    -patient: Patient
+    -allergies: String
+    -observations: String
+    @lombok
+  }
+}
+
+VitalSignsController ..> VitalSignsService : <<uses>>
+VitalSignsController -> VitalSignsDTO : Receives as @RequestBody
+VitalSignsController ..> VitalSigns : <<creates>>
+
+VitalSignsService..> VitalSignsController: <<returns>>
+VitalSignsService --|> CRUDService: <<implements>>
+VitalSignsService ..> VitalSignsRepository : <<uses>>
+
+VitalSignsRepository ---> VitalSignsService : <<returns>>
+VitalSignsRepository ---> VitalSigns : <<returns>>
+VitalSignsRepository ---|> JpaRepository: <<implements>>
+
+VitalSigns }o--|| MedicalHistory
+
+@enduml

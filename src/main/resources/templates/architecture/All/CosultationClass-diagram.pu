@@ -1,9 +1,9 @@
 @startuml Consultation
 
-package conntroller {
+package controller {
   class ConsultationController {
-    service: ConsultationService
-    personService: ConsultationService
+    -service: ConsultationService
+    -personService: PersonService
     +list(): List<Consultation>
     +getById(id: Long): Consultation
     +create(obj: ConsultationDTO): void

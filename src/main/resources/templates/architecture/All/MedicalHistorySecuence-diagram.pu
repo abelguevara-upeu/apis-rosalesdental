@@ -1,0 +1,59 @@
+@startuml MedicalHistory
+
+actor Cliente
+entity DispatcherSpring
+
+'--- GET /api/medicalHistory/ ---
+Cliente -> DispatcherSpring : [GET /getAll/{id}]
+DispatcherSpring -> MedicalHistoryController : list()
+MedicalHistoryController -> MedicalHistoryService : list()
+MedicalHistoryService -> MedicalHistoryRepository : findById(id): List
+MedicalHistoryRepository -> MedicalHistory : new()
+MedicalHistoryRepository --> MedicalHistoryService : return List<MedicalHistory>
+MedicalHistoryService --> MedicalHistoryController : return List<MedicalHistory>
+MedicalHistoryController --> DispatcherSpring : return ResponseEntity(List<MedicalHistory>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) medicalHistories
+
+'--- GET /api/medicalHistory/ ---
+Cliente -> DispatcherSpring : [GET /getOne/{id}]
+DispatcherSpring -> MedicalHistoryController : getById(id)
+MedicalHistoryController -> MedicalHistoryService : getOne(id)
+MedicalHistoryService -> MedicalHistoryRepository : findById(id)
+MedicalHistoryRepository -> MedicalHistory : new()
+MedicalHistoryRepository --> MedicalHistoryService : return MedicalHistory
+MedicalHistoryService --> MedicalHistoryController : return MedicalHistory
+MedicalHistoryController --> DispatcherSpring : return ResponseEntity(MedicalHistory)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) MedicalHistory
+
+' --- POST /api/medicalHistory/ ---
+Cliente -> DispatcherSpring : [POST /create]
+DispatcherSpring -> MedicalHistoryController : create(medicalHistoryDTO)
+MedicalHistoryController -> MedicalHistoryController: Mapper DTO to MedicalHistory
+MedicalHistoryController -> MedicalHistoryService : save(medicalHistory)
+MedicalHistoryService -> MedicalHistoryRepository : save(medicalHistory)
+MedicalHistoryRepository -> MedicalHistoryService : void
+MedicalHistoryService -> MedicalHistoryController : void
+MedicalHistoryController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) MedicalHistory
+
+' --- POST /api/medicalHistory/ ---
+Cliente -> DispatcherSpring : [PUT /create]
+DispatcherSpring -> MedicalHistoryController : update(medicalHistoryDTO)
+MedicalHistoryController -> MedicalHistoryController: Mapper DTO to MedicalHistory
+MedicalHistoryController -> MedicalHistoryService : save(medicalHistory)
+MedicalHistoryService -> MedicalHistoryRepository : save(medicalHistory)
+MedicalHistoryRepository -> MedicalHistoryService : void
+MedicalHistoryService -> MedicalHistoryController : void
+MedicalHistoryController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) MedicalHistory
+
+' --- DELETE /api/medicalHistory/ ---
+Cliente -> DispatcherSpring : [DELETE /delete/{id}]
+DispatcherSpring -> MedicalHistoryController: delete(id)
+MedicalHistoryController -> MedicalHistoryService : delete(id)
+MedicalHistoryService -> MedicalHistoryRepository : deleteById(id)
+MedicalHistoryRepository --> MedicalHistoryService : void
+MedicalHistoryService --> MedicalHistoryController : void
+MedicalHistoryController --> Cliente : HTTP 204 No Content
+
+@enduml

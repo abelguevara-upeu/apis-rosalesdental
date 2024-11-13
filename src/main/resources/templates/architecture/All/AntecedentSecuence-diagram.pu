@@ -1,0 +1,59 @@
+@startuml VitalSigns
+
+actor Cliente
+entity DispatcherSpring
+
+'--- GET /api/vitalSigns/ ---
+Cliente -> DispatcherSpring : [GET /getAll/{id}]
+DispatcherSpring -> VitalSignsController : list()
+VitalSignsController -> VitalSignsService : list()
+VitalSignsService -> VitalSignsRepository : findById(id): List
+VitalSignsRepository -> VitalSigns : new()
+VitalSignsRepository --> VitalSignsService : return List<VitalSigns>
+VitalSignsService --> VitalSignsController : return List<VitalSigns>
+VitalSignsController --> DispatcherSpring : return ResponseEntity(List<VitalSigns>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) VitalsSings
+
+'--- GET /api/vitalSigns/ ---
+Cliente -> DispatcherSpring : [GET /getOne/{id}]
+DispatcherSpring -> VitalSignsController : getById(id)
+VitalSignsController -> VitalSignsService : getOne(id)
+VitalSignsService -> VitalSignsRepository : findById(id)
+VitalSignsRepository -> VitalSigns : new()
+VitalSignsRepository --> VitalSignsService : return VitalSigns
+VitalSignsService --> VitalSignsController : return VitalSigns
+VitalSignsController --> DispatcherSpring : return ResponseEntity(VitalSigns)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) VitalSigns
+
+' --- POST /api/vitalSigns/ ---
+Cliente -> DispatcherSpring : [POST /create]
+DispatcherSpring -> VitalSignsController : create(VitalSignsDTO)
+VitalSignsController -> VitalSignsController: Mapper DTO to VitalSigns
+VitalSignsController -> VitalSignsService : save(vitalSigns)
+VitalSignsService -> VitalSignsRepository : save(vitalSigns)
+VitalSignsRepository -> VitalSignsService : void
+VitalSignsService -> VitalSignsController : void
+VitalSignsController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) VitalSigns
+
+' --- POST /api/vitalSigns/ ---
+Cliente -> DispatcherSpring : [PUT /create]
+DispatcherSpring -> VitalSignsController : update(VitalSignsDTO)
+VitalSignsController -> VitalSignsController: Mapper DTO to VitalSigns
+VitalSignsController -> VitalSignsService : save(vitalSigns)
+VitalSignsService -> VitalSignsRepository : save(vitalSigns)
+VitalSignsRepository -> VitalSignsService : void
+VitalSignsService -> VitalSignsController : void
+VitalSignsController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) VitalSigns
+
+' --- DELETE /api/vitalSigns/ ---
+Cliente -> DispatcherSpring : [DELETE /delete/{id}]
+DispatcherSpring -> VitalSignsController: delete(id)
+VitalSignsController -> VitalSignsService : delete(id)
+VitalSignsService -> VitalSignsRepository : deleteById(id)
+VitalSignsRepository --> VitalSignsService : void
+VitalSignsService --> VitalSignsController : void
+VitalSignsController --> Cliente : HTTP 204 No Content
+
+@enduml

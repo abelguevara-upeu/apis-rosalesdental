@@ -10,6 +10,7 @@ package repository {
 
 package controller {
   class DoctorController {
+    -service: DoctorService
     +list(): List<Doctor>
     +getById(id: Long): Doctor
     +create(obj: DoctorDTO): void

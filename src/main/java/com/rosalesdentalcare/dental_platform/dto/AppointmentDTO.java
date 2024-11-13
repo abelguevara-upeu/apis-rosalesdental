@@ -8,6 +8,7 @@ import lombok.Data;
 public class AppointmentDTO {
     private Long idAppointment;
     private Date appointmentDate;
+    private Date appointmentDateEnd;
     private Long patientId;
     private Long treatmentId;
     private Long scheduleId;

@@ -1,0 +1,16 @@
+@startuml test
+
+actor Cliente
+entity DispatcherSpring
+
+' --- POST /api/patients/ ---
+Cliente -> DispatcherSpring : [POST /create]
+DispatcherSpring -> PatientController : create(patientDTO)
+PatientController -> PatientController: Mapper DTO to Patient
+PatientController -> PatientService : save(consultation)
+PatientService -> PatientRepository : save(consultation)
+PatientRepository -> PatientService : void
+PatientService -> PatientController : void
+PatientController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Patient
+@enduml

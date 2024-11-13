@@ -12,7 +12,7 @@ TreatmentRepository -> Treatment : new()
 TreatmentRepository --> TreatmentService : return List<Treatment>
 TreatmentService --> TreatmentController : return List<Treatment>
 TreatmentController --> DispatcherSpring : return ResponseEntity(List<Treatment>)
-DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Persons
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Treatments
 
 '--- GET /api/patients/ ---
 Cliente -> DispatcherSpring : [GET /getOne/{id}]
@@ -27,10 +27,10 @@ DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Treatment
 
 ' --- POST /api/patients/ ---
 Cliente -> DispatcherSpring : [POST /create]
-DispatcherSpring -> TreatmentController : create(patientDTO)
+DispatcherSpring -> TreatmentController : create(treatmentDTO)
 TreatmentController -> TreatmentController: Mapper DTO to Treatment
-TreatmentController -> TreatmentService : save(consultation)
-TreatmentService -> TreatmentRepository : save(consultation)
+TreatmentController -> TreatmentService : save(treatment)
+TreatmentService -> TreatmentRepository : save(treatment)
 TreatmentRepository -> TreatmentService : void
 TreatmentService -> TreatmentController : void
 TreatmentController --> DispatcherSpring : return ResponseEntity()
@@ -38,10 +38,10 @@ DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Treatment
 
 ' --- POST /api/patients/ ---
 Cliente -> DispatcherSpring : [PUT /create]
-DispatcherSpring -> TreatmentController : update(patientDTO)
+DispatcherSpring -> TreatmentController : update(treatmentDTO)
 TreatmentController -> TreatmentController: Mapper DTO to Treatment
-TreatmentController -> TreatmentService : save(consultation)
-TreatmentService -> TreatmentRepository : save(consultation)
+TreatmentController -> TreatmentService : save(treatment)
+TreatmentService -> TreatmentRepository : save(treatment)
 TreatmentRepository -> TreatmentService : void
 TreatmentService -> TreatmentController : void
 TreatmentController --> DispatcherSpring : return ResponseEntity()
@@ -55,4 +55,5 @@ TreatmentService -> TreatmentRepository : deleteById(id)
 TreatmentRepository --> TreatmentService : void
 TreatmentService --> TreatmentController : void
 TreatmentController --> Cliente : HTTP 204 No Content
+
 @enduml

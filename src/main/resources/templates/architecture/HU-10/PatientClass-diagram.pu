@@ -1,0 +1,89 @@
+@startuml hu25
+package repository {
+
+  interface PatientRepository {
+    findByPerson_Name(String name): List<Patient>
+  }
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package controller {
+
+  class PatientController {
+    -service: PatientService
+    -personService: PersonService
+    +update(id: Long, obj: PatientDTO): void
+  }
+}
+
+package service {
+
+  class PatientService {
+    +save(obj: Patient): Patient
+    +existsById(id: Long): boolean
+  }
+
+  interface CRUDService{
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+}
+
+package dto {
+  class PatientDTO {
+    -idPerson: Long
+    -firstName: String
+    -lastNameFather: String
+    -lastNameMother: String
+    -gender: Character
+    -birthDate: Date
+    -phone: String
+    -dni: String
+    -address: String
+    -@lombok
+  }
+}
+
+package entity {
+
+  class Person {
+    -idPerson: Long
+    -firstName: String
+    -lastNameFather: String
+    -lastNameMother: String
+    -gender: Character
+    -birthDate: Date
+    -phone: String
+    -dni: String
+    -address: String
+    @lombok
+  }
+
+  class Patient {
+    -idPatient: Long
+    -personId: Long
+    @lombok
+  }
+}
+
+PatientController ..> PatientService : <<uses>>
+PatientController --> PatientDTO : Receives as @RequestBody
+PatientController ..> Patient : <<creates>>
+
+PatientService..> PatientController: <<returns>>
+PatientService --|> CRUDService
+PatientService ..> PatientRepository : <<uses>>
+
+PatientRepository --> PatientService : <<returns>>
+PatientRepository --> Patient : <<returns>>
+PatientRepository --|> JpaRepository: <<implements>>
+
+Patient }o--|| Person
+
+@enduml

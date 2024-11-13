@@ -4,10 +4,10 @@ actor Cliente
 entity DispatcherSpring
 
 '--- GET /api/consultation/ ---
-Cliente -> DispatcherSpring : [GET /getAll/{id}]
+Cliente -> DispatcherSpring : [GET /getAll]
 DispatcherSpring -> ConsultationController : list()
 ConsultationController -> ConsultationService : list()
-ConsultationService -> ConsultationRepository : findById(id): List
+ConsultationService -> ConsultationRepository : findAll(): List<Consultation>
 ConsultationRepository -> Consultation : new()
 ConsultationRepository --> ConsultationService : return List<Consultation>
 ConsultationService --> ConsultationController : return List<Consultation>

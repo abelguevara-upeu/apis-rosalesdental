@@ -1,0 +1,115 @@
+@startuml hu25
+package repository {
+  interface AppointmentRepository {
+    +findByAppointment_Date(date: Date): List<Appointment>
+    +findByState(state: String): List<Appointment>
+  }
+
+  interface JpaRepository {
+    ~DynamycQueryAlgoritm
+  }
+}
+
+package controller {
+  class AppointmentController {
+    -service: AppointmentService
+    -patientService: PatientService
+    -doctorService: DoctorService
+    -treatmentService: TreatmentService
+    +list(): List<Appointment>
+    +getById(id: Long): Appointment
+
+    +create(obj: AppointmentDTO): void
+  }
+}
+
+package service {
+
+  class AppointmentService {
+    +list(): List<Appointment>
+    +getOne(id: Long): Appointment
+
+    +save(obj: Appointment): Appointment
+
+    +existsById(id: Long): boolean
+    +filterByAppointmentDate(date: Date): List<Appointment>
+    +filterByState(state: String): List<Appointment>
+  }
+
+  interface CRUDService{
+    +list(): List<T>
+    +getOne(id: ID): Optional<T>
+    +save(obj: T): void
+    +delete(id: ID): void
+    +existsById(id: ID): boolean
+  }
+}
+
+package dto {
+  class AppointmentDTO {
+    -idAppointment: Long
+    -appointmentDate: Date
+    -patientId: Long
+    -treatmentId: Long
+    -scheduleId: Long
+    -doctorId: Long
+    -notes: String
+    @lombok
+  }
+}
+
+package entity {
+
+  class Appointment {
+    -idAppointment: Long
+    -appointmentDate: Date
+    -patient: Patient
+    -treatment: Treatment
+    -schedule: AppointmentSchedule
+    -doctor: Doctor
+    -notes: String
+    @lombok
+  }
+
+  class Patient {
+    idPatient: Long
+    person: Person
+    @lombok
+  }
+
+  class Treatment {
+    -idTreatment: Long
+    -treatmentName: String
+    -treatmentType: String
+    -description: String
+    -cost: String
+    @lombok
+  }
+
+  class Doctor {
+    idDoctor: Long
+    personId: Long
+    specialty: String
+    @lombok
+  }
+
+}
+
+AppointmentController ..> AppointmentService : <<uses>>
+AppointmentController --> AppointmentDTO : Receives as @RequestBody
+AppointmentController ..> Appointment : <<creates>>
+
+AppointmentService..> AppointmentController: <<returns>>
+AppointmentService --|> CRUDService
+AppointmentService ..> AppointmentRepository : <<uses>>
+
+AppointmentRepository --> AppointmentService : <<returns>>
+AppointmentRepository --> Appointment : <<returns>>
+AppointmentRepository --|> JpaRepository: <<implements>>
+
+Appointment }o--|| Patient
+Appointment }o--|| Treatment
+Appointment }o--|| AppointmentSchedule
+Appointment }o--|| Doctor
+
+@enduml

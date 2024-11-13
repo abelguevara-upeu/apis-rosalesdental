@@ -19,12 +19,10 @@ import com.rosalesdentalcare.dental_platform.entity.Appointment;
 import com.rosalesdentalcare.dental_platform.entity.Patient;
 import com.rosalesdentalcare.dental_platform.entity.Doctor;
 import com.rosalesdentalcare.dental_platform.entity.Treatment;
-import com.rosalesdentalcare.dental_platform.entity.AppointmentSchedule;
 import com.rosalesdentalcare.dental_platform.service.impl.AppointmentService;
 import com.rosalesdentalcare.dental_platform.service.impl.PatientService;
 import com.rosalesdentalcare.dental_platform.service.impl.DoctorService;
 import com.rosalesdentalcare.dental_platform.service.impl.TreatmentService;
-import com.rosalesdentalcare.dental_platform.service.impl.AppointmentScheduleService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -42,9 +40,6 @@ public class AppointmentController {
 
     @Autowired
     private TreatmentService treatmentService;
-
-    @Autowired
-    private AppointmentScheduleService scheduleService;
 
     @Autowired
     private ModelMapper mapper;
@@ -95,10 +90,10 @@ public class AppointmentController {
         }
 
         // Asignar el horario
-        if (dto.getScheduleId() != null) {
-            Optional<AppointmentSchedule> scheduleOpt = scheduleService.getOne(dto.getScheduleId());
-            scheduleOpt.ifPresent(appointment::setSchedule);
-        }
+        // if (dto.getScheduleId() != null) {
+        //     Optional<AppointmentSchedule> scheduleOpt = scheduleService.getOne(dto.getScheduleId());
+        //     scheduleOpt.ifPresent(appointment::setSchedule);
+        // }
 
         appointmentService.save(appointment);
         ApiResponse<Object> response = new ApiResponse<>(true, "Cita creada exitosamente", null);
@@ -133,11 +128,11 @@ public class AppointmentController {
             treatmentOpt.ifPresent(appointment::setTreatment);
         }
 
-        // Asignar el horario
-        if (dto.getScheduleId() != null) {
-            Optional<AppointmentSchedule> scheduleOpt = scheduleService.getOne(dto.getScheduleId());
-            scheduleOpt.ifPresent(appointment::setSchedule);
-        }
+        // // Asignar el horario
+        // if (dto.getScheduleId() != null) {
+        //     Optional<AppointmentSchedule> scheduleOpt = scheduleService.getOne(dto.getScheduleId());
+        //     scheduleOpt.ifPresent(appointment::setSchedule);
+        // }
 
         appointment.setIdAppointment(id);  // Asegura que no se cambie el ID de la cita existente
         appointmentService.save(appointment);

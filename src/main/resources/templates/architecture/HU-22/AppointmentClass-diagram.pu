@@ -12,10 +12,14 @@ package repository {
 
 package controller {
   class AppointmentController {
+    -service: AppointmentService
+    -patientService: PatientService
+    -doctorService: DoctorService
+    -treatmentService: TreatmentService
     +list(): List<Appointment>
     +getById(id: Long): Appointment
     +create(obj: AppointmentDTO): void
-    +update(id: Long, obj: AppointmentDTO): void
+
     +delete(id: Long): void
   }
 }
@@ -26,7 +30,9 @@ package service {
     +list(): List<Appointment>
     +getOne(id: Long): Appointment
     +save(obj: Appointment): Appointment
+
     +delete(id: Long): void
+
     +existsById(id: Long): boolean
     +filterByAppointmentDate(date: Date): List<Appointment>
     +filterByState(state: String): List<Appointment>
@@ -45,9 +51,9 @@ package dto {
   class AppointmentDTO {
     -idAppointment: Long
     -appointmentDate: Date
+    -appointmentDateEnd: Date
     -patientId: Long
     -treatmentId: Long
-    -scheduleId: Long
     -doctorId: Long
     -notes: String
     @lombok
@@ -59,9 +65,9 @@ package entity {
   class Appointment {
     -idAppointment: Long
     -appointmentDate: Date
+    -appointmentDateEnd: Date
     -patient: Patient
     -treatment: Treatment
-    -schedule: AppointmentSchedule
     -doctor: Doctor
     -notes: String
     @lombok
@@ -82,11 +88,6 @@ package entity {
     @lombok
   }
 
-  class AppointmentSchedule {
-    -idSchedule: Long
-    -startTime: Time
-    -endTime: Time
-  }
   class Doctor {
     idDoctor: Long
     personId: Long

@@ -25,20 +25,31 @@ AppointmentService --> AppointmentController : return Appointment
 AppointmentController --> DispatcherSpring : return ResponseEntity(Appointment)
 DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Appointment
 
+'--- GET /api/appointments/ ---
+Cliente -> DispatcherSpring : [GET /filterState/{state}]
+DispatcherSpring -> AppointmentController : filterByState(state)
+AppointmentController -> AppointmentService : filterByState(state)
+AppointmentService -> AppointmentRepository : filterByState(state): List<Appointment>
+AppointmentRepository -> Appointment : new()
+AppointmentRepository --> AppointmentService : return List<Appointment>
+AppointmentService --> AppointmentController : return List<Appointment>
+AppointmentController --> DispatcherSpring : return ResponseEntity(List<Appointment>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Appointments filtered
+
+'--- GET /api/appointments/ ---
+Cliente -> DispatcherSpring : [GET /filterDate/{date}]
+DispatcherSpring -> AppointmentController : filterByDate(date)
+AppointmentController -> AppointmentService : filterByDate(date)
+AppointmentService -> AppointmentRepository : filterByAppointmentDate(date): List<Appointment>
+AppointmentRepository -> Appointment : new()
+AppointmentRepository --> AppointmentService : return List<Appointment>
+AppointmentService --> AppointmentController : return List<Appointment>
+AppointmentController --> DispatcherSpring : return ResponseEntity(List<Appointment>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Appointments filtered
+
 ' --- POST /api/appointments/ ---
 Cliente -> DispatcherSpring : [POST /create]
 DispatcherSpring -> AppointmentController : create(appointmentDTO)
-AppointmentController -> AppointmentController: Mapper DTO to Appointment
-AppointmentController -> AppointmentService : save(consultation)
-AppointmentService -> AppointmentRepository : save(consultation)
-AppointmentRepository -> AppointmentService : void
-AppointmentService -> AppointmentController : void
-AppointmentController --> DispatcherSpring : return ResponseEntity()
-DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Appointment
-
-' --- POST /api/appointments/ ---
-Cliente -> DispatcherSpring : [PUT /create]
-DispatcherSpring -> AppointmentController : update(appointmentDTO)
 AppointmentController -> AppointmentController: Mapper DTO to Appointment
 AppointmentController -> AppointmentService : save(consultation)
 AppointmentService -> AppointmentRepository : save(consultation)

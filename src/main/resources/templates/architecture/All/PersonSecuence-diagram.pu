@@ -27,10 +27,10 @@ DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Person
 
 ' --- POST /api/patients/ ---
 Cliente -> DispatcherSpring : [POST /create]
-DispatcherSpring -> PersonController : create(patientDTO)
+DispatcherSpring -> PersonController : create(personDTO)
 PersonController -> PersonController: Mapper DTO to Person
-PersonController -> PersonService : save(consultation)
-PersonService -> PersonRepository : save(consultation)
+PersonController -> PersonService : save(person)
+PersonService -> PersonRepository : save(person)
 PersonRepository -> PersonService : void
 PersonService -> PersonController : void
 PersonController --> DispatcherSpring : return ResponseEntity()
@@ -38,10 +38,10 @@ DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Person
 
 ' --- POST /api/patients/ ---
 Cliente -> DispatcherSpring : [PUT /create]
-DispatcherSpring -> PersonController : update(patientDTO)
+DispatcherSpring -> PersonController : update(personDTO)
 PersonController -> PersonController: Mapper DTO to Person
-PersonController -> PersonService : save(consultation)
-PersonService -> PersonRepository : save(consultation)
+PersonController -> PersonService : save(person)
+PersonService -> PersonRepository : save(person)
 PersonRepository -> PersonService : void
 PersonService -> PersonController : void
 PersonController --> DispatcherSpring : return ResponseEntity()

@@ -11,6 +11,8 @@ package repository {
 
 package controller {
   class PatientController {
+    -service: PatientService
+    -personService: PersonService
     +list(): List<Patient>
     +getById(id: Long): Patient
     +create(obj: PatientDTO): void

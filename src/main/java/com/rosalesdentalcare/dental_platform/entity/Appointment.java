@@ -8,12 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-@Entity
+@Entity @Table(indexes = {@Index(columnList = "state")})
 public class Appointment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAppointment;
 
     private Date appointmentDate;
+
+    private Date appointmentDateEnd;
 
     @ManyToOne
     @JoinColumn(name = "idPatient", nullable = false)
@@ -23,9 +25,9 @@ public class Appointment {
     @JoinColumn(name = "idTreatment", nullable = false)
     private Treatment treatment;
 
-    @ManyToOne
-    @JoinColumn(name = "idSchedule", nullable = false)
-    private AppointmentSchedule schedule;
+    // @ManyToOne
+    // @JoinColumn(name = "idSchedule", nullable = false)
+    // private AppointmentSchedule schedule;
 
     @ManyToOne
     @JoinColumn(name = "idDoctor", nullable = false)
