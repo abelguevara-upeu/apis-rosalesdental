@@ -29,9 +29,9 @@ public class TreatmentController {
 
     @GetMapping("/getOne/{id}")
     public ResponseEntity<ApiResponse<Treatment>> getTreatmentById(@PathVariable Long id) {
-        Optional<Treatment> treatmentOpt = treatmentService.getOne(id);
-        if (treatmentOpt.isPresent()) {
-            ApiResponse<Treatment> response = new ApiResponse<>(true, "Tratamiento encontrado", treatmentOpt.get());
+        Optional<Treatment> field = treatmentService.getOne(id);
+        if (field.isPresent()) {
+            ApiResponse<Treatment> response = new ApiResponse<>(true, "Tratamiento encontrado", field.get());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             ApiResponse<Treatment> response = new ApiResponse<>(false, "Tratamiento no encontrado", null);
@@ -40,21 +40,22 @@ public class TreatmentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Treatment>> createTreatment(@RequestBody Treatment treatment) {
-        treatmentService.save(treatment);
-        ApiResponse<Treatment> response = new ApiResponse<>(true, "Tratamiento creado exitosamente", treatment);
+    public ResponseEntity<ApiResponse<Treatment>> createTreatment(@RequestBody Treatment obj) {
+        treatmentService.save(obj);
+        ApiResponse<Treatment> response = new ApiResponse<>(true, "Tratamiento creado exitosamente", obj);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse<Treatment>> updateTreatment(@PathVariable Long id, @RequestBody Treatment treatment) {
+    public ResponseEntity<ApiResponse<Treatment>> updateTreatment(@PathVariable Long id, @RequestBody Treatment obj) {
         if (!treatmentService.existsById(id)) {
             ApiResponse<Treatment> response = new ApiResponse<>(false, "Tratamiento no encontrado", null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-        treatment.setIdTreatment(id);
-        treatmentService.save(treatment);
-        ApiResponse<Treatment> response = new ApiResponse<>(true, "Tratamiento actualizado exitosamente", treatment);
+
+        obj.setIdTreatment(id);
+        treatmentService.save(obj);
+        ApiResponse<Treatment> response = new ApiResponse<>(true, "Tratamiento actualizado exitosamente", obj);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

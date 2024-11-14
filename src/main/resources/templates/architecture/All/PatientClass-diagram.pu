@@ -75,15 +75,7 @@ package entity {
     -personId: Long
     @lombok
   }
-
 }
-
-
-
-
-
-
-
 
 PatientController ..> PatientService : <<uses>>
 PatientController --> PatientDTO : Receives as @RequestBody

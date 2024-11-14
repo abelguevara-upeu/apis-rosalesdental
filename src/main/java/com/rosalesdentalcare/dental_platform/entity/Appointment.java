@@ -2,6 +2,8 @@ package com.rosalesdentalcare.dental_platform.entity;
 import jakarta.persistence.*;
 import java.util.Date;
 
+import com.rosalesdentalcare.dental_platform.dto.AppointmentDTO;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -25,15 +27,12 @@ public class Appointment {
     @JoinColumn(name = "idTreatment", nullable = false)
     private Treatment treatment;
 
-    // @ManyToOne
-    // @JoinColumn(name = "idSchedule", nullable = false)
-    // private AppointmentSchedule schedule;
-
     @ManyToOne
     @JoinColumn(name = "idDoctor", nullable = false)
     private Doctor doctor;
 
     private String notes;
     private String state;
+
 }
 

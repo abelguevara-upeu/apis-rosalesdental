@@ -11,7 +11,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
-        ApiResponse<Object> response = new ApiResponse<>(false, "Error interno del servidor: " + ex.getMessage(), null);
+        ApiResponse<Object> response = new ApiResponse<>(false, "Error interno del servidor: " + ex.getMessage(), ex);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
