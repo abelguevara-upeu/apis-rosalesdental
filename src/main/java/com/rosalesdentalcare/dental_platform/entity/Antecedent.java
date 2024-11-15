@@ -15,8 +15,8 @@ public class Antecedent {
     private Long idAntecedent;
 
     @ManyToOne
-    @JoinColumn(name = "idMedicalHistory", nullable = false)
-    private MedicalHistory medicalHistory;
+    @JoinColumn(name = "idPerson", nullable = false)
+    private Person person;
 
     private String type;
     private String description;

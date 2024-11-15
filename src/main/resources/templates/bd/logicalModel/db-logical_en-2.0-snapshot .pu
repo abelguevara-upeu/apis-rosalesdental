@@ -62,8 +62,8 @@ entity "VitalSings" as VitalSings {
 }
 
 entity "Antecedent" as Antecedent {
-    #ID_Antecedente: INT
-    -date: DATE
+    #id_antecedent: INT
+    -allergies: TEXT
     -description: TEXT
     +type: VARCHAR[50] /' type de antecedente, por ejemplo, "familiar" o "Personl" '/
     ~id_medical_history: INT
@@ -72,7 +72,6 @@ entity "Antecedent" as Antecedent {
 
 entity "Medical_History" as Medical_History {
     #id_history: INT
-    -allergies: TEXT
     +creation_date: DATE
     -observations: TEXT
     ~id_patient: INT
@@ -145,7 +144,7 @@ Person ||--o{ User : es
 Person ||--o{ Consultation : realiza
 Patient ||--|{ Medical_History : tiene
 'Odontogram ||--o{ OdontogramaDetalle : tiene
-Medical_History ||--o{ Antecedent : contiene
+Patient ||--o{ Antecedent : contiene
 'Medical_History ||--o{ Odontogram : contiene
 Medical_History ||--o{ VitalSings : registra
 Medical_History ||--o{ Clinical_Exam : incluye

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class AntecedentsDTO {
     private Long idAntecedent;
-    private Long medicalHistoryId;
+    private Long personId;
     private String type;
     private String description;
     private Date date;
