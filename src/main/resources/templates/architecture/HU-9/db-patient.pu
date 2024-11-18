@@ -1,0 +1,30 @@
+@startuml relational_view
+
+/'{
+    # PRIMARY KEY
+    ~ UNIQUE (NULLABLE)
+    + NOT NULL
+    - NULLABLE
+}'/
+
+entity "Person" as Person {
+    #id_person: INT
+    -address: VARCHAR[255]
+    -brith_date: DATE
+    -dni: VARCHAR[10]
+    +first_name: VARCHAR[100]
+    -gender: CHAR[1]
+    +last_name_father: VARCHAR[100]
+    +last_name_mother: VARCHAR[100]
+    +phone: VARCHAR[15]
+    /' Person representa a la Person base, que puede ser paciente, médico o usuario '/
+}
+
+entity "Patient" as Patient {
+    #id_patient: INT
+    ~id_person: INT
+    /' Un paciente es una Person, pero con un historial clínico asociado '/
+}
+
+Person ||--o{ Patient : es
+@enduml

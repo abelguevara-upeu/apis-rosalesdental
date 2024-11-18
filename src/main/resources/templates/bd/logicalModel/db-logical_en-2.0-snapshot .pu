@@ -7,7 +7,7 @@
     - NULLABLE
 }'/
 
-entity "Person" as Persona {
+entity "Person" as Person {
     #ID_Persona: INT
     +Nombre: VARCHAR[100]
     +Apellido_Paterno: VARCHAR[100]
@@ -20,22 +20,15 @@ entity "Person" as Persona {
     /' Persona representa a la persona base, que puede ser paciente, médico o usuario '/
 }
 
-<<<<<<< Updated upstream
-entity "Patient" as Paciente {
-    #ID_Paciente: INT
-    #ID_Persona: INT
-    /' Un paciente es una persona, pero con un historial clínico asociado '/
-=======
 entity "Patient" as Patient {
     #id_patient: INT
     ~id_person: INT
     -antecedents: TEXT
     -alergies: TEXT
     /' Un paciente es una Person, pero con un historial clínico asociado '/
->>>>>>> Stashed changes
 }
 
-entity "Doctor" as Medico {
+entity "Doctor" as Doctor {
     #ID_Medico: INT
     #ID_Persona: INT
     -Especialidad: VARCHAR[100]
@@ -51,7 +44,7 @@ entity "User" as User {
     /' User representa la información de los usuarios del sistema, con roles definidos '/
 }
 
-entity "Consulta" as Consulta {
+entity "Consultation" as Consultation {
     #ID_Consulta: INT
     +Fecha_Consulta: DATETIME
     #ID_Persona: INT
@@ -60,7 +53,7 @@ entity "Consulta" as Consulta {
     /' La consulta es realizada por una persona (puede ser un paciente o no), y contiene detalles '/
 }
 
-entity "SignosVitales" as SignosVitales {
+entity "VitalSigns" as VitalSings {
     #ID_SignoVital: INT
     #ID_HistorialClinico: INT
     +Fecha_Medicion: DATETIME
@@ -71,33 +64,15 @@ entity "SignosVitales" as SignosVitales {
     /' Signos vitales registrados durante una consulta, asociados al historial clínico '/
 }
 
-<<<<<<< Updated upstream
-entity "Antecedentes" as Antecedentes {
-    #ID_Antecedente: INT
-    #ID_HistorialClinico: INT
-    +Tipo: VARCHAR[50] /' Tipo de antecedente, por ejemplo, "familiar" o "personal" '/
-    -Descripcion: TEXT
-    -Fecha: DATE
-    /' Los antecedentes médicos relevantes, ya sean familiares o personales, se registran en esta tabla '/
-}
-
-entity "HistorialClinico" as HistorialClinico {
-    #ID_Historial: INT
-    +Fecha_Creacion: DATE
-    #ID_Paciente: INT
-    -Alergias: TEXT
-    -Observaciones: TEXT
-=======
 entity "Medical_History" as Medical_History {
     #id_history: INT
     +creation_date: DATE
     -observations: TEXT
     ~id_patient: INT
->>>>>>> Stashed changes
     /' El historial clínico se crea para cada paciente y contiene datos médicos relevantes '/
 }
 
-entity "ExamenClinico" as ExamenClinico {
+entity "Clinical_Exam" as Clinical_Exam {
     #ID_Examen: INT
     #ID_HistorialClinico: INT
     +Tipo_Examen: VARCHAR[100] /' "Estomatológico" o "General" '/
@@ -107,25 +82,15 @@ entity "ExamenClinico" as ExamenClinico {
     /' Los exámenes clínicos, como estomatológicos o generales, se registran aquí '/
 }
 
-entity "Odontograma" as Odontograma {
-    #ID_Odontograma: INT
-    #ID_HistorialClinico: INT
-    +Fecha_Creacion: DATE
-    -Detalles: TEXT
-    /' El odontograma es el registro de los dientes y su estado, utilizado en la odontología '/
-}
+'entity "Odontograma" as Odontogram {
+'    #ID_Odontograma: INT
+'    #ID_HistorialClinico: INT
+'    +Fecha_Creacion: DATE
+'    -Detalles: TEXT
+'    /' El odontograma es el registro de los dientes y su estado, utilizado en la odontología '/
+'}
 
-entity "OdontogramaDetalle" as OdontogramaDetalle {
-    #ID_Detalle: INT
-    #ID_Odontograma: INT
-    +Diente: VARCHAR[10] /' Número o posición del diente '/
-    -Estado: VARCHAR[50] /' Estado del diente, por ejemplo, "caries", "restaurado", "extracción" '/
-    -Tratamiento: VARCHAR[100] /' Tratamiento aplicado o recomendado '/
-    -Observaciones: TEXT
-    /' Detalle específico de cada diente en el odontograma, incluyendo su estado y tratamiento '/
-}
-
-entity "Tratamiento" as Tratamiento {
+entity "Treatment" as Treatment {
     #ID_Tratamiento: INT
     +Nombre_Tratamiento: VARCHAR[100]
     +Tipo_Tratamiento: VARCHAR[50] /' Tipo de tratamiento: "Estético", "Curativo", "Preventivo", etc. '/
@@ -134,16 +99,10 @@ entity "Tratamiento" as Tratamiento {
     /' Registro de los tratamientos disponibles, su nombre, tipo y costo asociado '/
 }
 
-entity "HorarioCita" as HorarioCita {
-    #ID_Horario: INT
-    +Hora_Inicio: TIME
-    +Hora_Fin: TIME
-    /' Definición de los horarios de cita para los pacientes y médicos '/
-}
-
-entity "Cita" as Cita {
+entity "Appointment" as Appointment {
     #ID_Cita: INT
     +Fecha_Cita: DATE
+    +Fecha_End: Date
     #ID_Paciente: INT
     #ID_Tratamiento: INT
     #ID_Horario: INT
@@ -152,7 +111,7 @@ entity "Cita" as Cita {
     /' Información sobre cada cita médica, incluida la fecha, tratamiento, horario y médico '/
 }
 
-entity "Diagnostico" as Diagnostico {
+entity "Diagnosis" as Diagnosis {
     #ID_Diagnostico: INT
     +Fecha_Diagnostico: DATE
     #ID_HistorialClinico: INT
@@ -161,24 +120,6 @@ entity "Diagnostico" as Diagnostico {
     /' Registro de los diagnósticos realizados, asociados al historial clínico '/
 }
 
-<<<<<<< Updated upstream
-Persona ||--o{ Paciente : es
-Persona ||--o{ Medico : es
-Persona ||--o{ User : es
-Persona ||--o{ Consulta : realiza
-Paciente ||--|{ HistorialClinico : tiene
-HistorialClinico ||--o{ SignosVitales : registra
-HistorialClinico ||--o{ Antecedentes : contiene
-HistorialClinico ||--o{ ExamenClinico : incluye
-HistorialClinico ||--o{ Odontograma : contiene
-Odontograma ||--o{ OdontogramaDetalle : tiene
-HistorialClinico ||--o{ Cita : registra
-Cita }o--|| Tratamiento : aplica
-Paciente ||--o{ Cita : asiste a
-HistorialClinico ||--o{ Diagnostico : contiene
-HorarioCita ||--o{ Cita : en
-Medico ||--o{ Cita : atiende
-=======
 Person ||--o{ Patient : es
 Person ||--o{ Doctor : es
 Person ||--o{ User : es
@@ -192,7 +133,7 @@ Medical_History ||--o{ Clinical_Exam : incluye
 Patient ||--o{ Appointment : asiste a
 Doctor ||--o{ Appointment : atiende
 
-Appointment }o--|| treatment : aplica
+Appointment }o--|| Treatment : aplica
 Medical_History ||--o{ Diagnosis : contiene
->>>>>>> Stashed changes
+
 @enduml
