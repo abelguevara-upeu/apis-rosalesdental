@@ -8,59 +8,56 @@
 }'/
 
 entity "Person" as Person {
-    #ID_Persona: INT
-    +Nombre: VARCHAR[100]
-    +Apellido_Paterno: VARCHAR[100]
-    +Apellido_Materno: VARCHAR[100]
-    -Genero: CHAR[1]
-    -Fecha_Nacimiento: DATE
-    +Telefono: VARCHAR[15]
-    -DNI: VARCHAR[10]
-    -Direccion: VARCHAR[255]
-    /' Persona representa a la persona base, que puede ser paciente, médico o usuario '/
+    #id_person: INT
+    -address: VARCHAR[255]
+    -brith_date: DATE
+    -dni: VARCHAR[10]
+    +first_name: VARCHAR[100]
+    -gender: CHAR[1]
+    +last_name_father: VARCHAR[100]
+    +last_name_mother: VARCHAR[100]
+    +phone: VARCHAR[15]
+    /' Person representa a la Person base, que puede ser paciente, médico o usuario '/
 }
 
 entity "Patient" as Patient {
     #id_patient: INT
     ~id_person: INT
-    -antecedents: TEXT
-    -alergies: TEXT
     /' Un paciente es una Person, pero con un historial clínico asociado '/
 }
 
 entity "Doctor" as Doctor {
-    #ID_Medico: INT
-    #ID_Persona: INT
-    -Especialidad: VARCHAR[100]
-    /' El médico es una persona con una especialidad profesional '/
+    #id_doctor: INT
+    -specialty: VARCHAR[100]
+    ~id_person: INT
+    /' El médico es una Person con una specialty profesional '/
 }
 
 entity "User" as User {
-    #ID_User: INT
-    ~ID_Persona: INT
-    +Username: VARCHAR[50]
-    +Password: VARCHAR[255]
-    -Rol: VARCHAR[50]
+    #id_user: INT
+    +password: VARCHAR[255]
+    -role: VARCHAR[50]
+    +username: VARCHAR[50]
+    ~id_person: INT
     /' User representa la información de los usuarios del sistema, con roles definidos '/
 }
 
 entity "Consultation" as Consultation {
-    #ID_Consulta: INT
-    +Fecha_Consulta: DATETIME
-    #ID_Persona: INT
-    -Motivo: TEXT
-    -Detalles: TEXT
-    /' La consulta es realizada por una persona (puede ser un paciente o no), y contiene detalles '/
+    #id_consultation: INT
+    +consultation_date: DATETIME
+    -details: TEXT
+    -reason: TEXT
+    ~id_person: INT
+    /' La consulta es realizada por una Person (puede ser un paciente o no), y contiene detalles '/
 }
 
-entity "VitalSigns" as VitalSings {
-    #ID_SignoVital: INT
-    #ID_HistorialClinico: INT
-    +Fecha_Medicion: DATETIME
-    -Presion_Arterial: VARCHAR[10]
-    -Frecuencia_Cardiaca: INT
-    -Temperatura: DECIMAL[5,2]
-    -Frecuencia_Respiratoria: INT
+entity "VitalSings" as VitalSings {
+    #id_vital_sign: INT
+    -blood_pressure: VARCHAR[10]
+    -heart_rate: INT
+    +measuremennt_date: DATETIME
+    -respiratory_rate: INT
+    -temperature: DECIMAL[5,2]
     /' Signos vitales registrados durante una consulta, asociados al historial clínico '/
 }
 
@@ -73,50 +70,62 @@ entity "Medical_History" as Medical_History {
 }
 
 entity "Clinical_Exam" as Clinical_Exam {
-    #ID_Examen: INT
-    #ID_HistorialClinico: INT
-    +Tipo_Examen: VARCHAR[100] /' "Estomatológico" o "General" '/
-    +Fecha_Examen: DATE
-    -Hallazgos: TEXT
-    -Recomendaciones: TEXT
+    #id_exam: INT
+    +exam_date: DATE
+    +exam_type: VARCHAR[100] /' "Estomatológico" o "General" '/
+    -findings: TEXT
+    -recommendations: TEXT
+    ~id_medical_history: INT
     /' Los exámenes clínicos, como estomatológicos o generales, se registran aquí '/
 }
 
-'entity "Odontograma" as Odontogram {
-'    #ID_Odontograma: INT
-'    #ID_HistorialClinico: INT
-'    +Fecha_Creacion: DATE
-'    -Detalles: TEXT
-'    /' El odontograma es el registro de los dientes y su estado, utilizado en la odontología '/
+
+'entity "Odontogram" as Odontogram {
+'    #id_odontogram: INT
+'    +creation_date: DATE
+'    -details: TEXT
+'    ~id_medical_history: INT
+'    'El odontograma es el registro de los dientes y su estado, utilizado en la odontología
 '}
 
-entity "Treatment" as Treatment {
-    #ID_Tratamiento: INT
-    +Nombre_Tratamiento: VARCHAR[100]
-    +Tipo_Tratamiento: VARCHAR[50] /' Tipo de tratamiento: "Estético", "Curativo", "Preventivo", etc. '/
-    -Descripcion: TEXT
-    -Costo: DECIMAL[10,2]
-    /' Registro de los tratamientos disponibles, su nombre, tipo y costo asociado '/
+'entity "OdontogramaDetalle" as OdontogramaDetalle {
+'    #id_detail: INT
+'    -observations: TEXT
+'    +tooth: VARCHAR[10] /' Número o posición del diente '/
+'    -tooth_condition: VARCHAR[50] /' tooth_condition del diente, por ejemplo, "caries", "restaurado", "extracción" '/
+'    -treatment: VARCHAR[100] /' treatment aplicado o recomendado '/
+'    ~id_odontogram: INT
+'    'Detalle específico de cada diente en el odontograma, incluyendo su estado y tratamiento
+'}
+
+
+entity "treatment" as treatment {
+    #id_treatment: INT
+    -cost: DECIMAL[10,2]
+    -description: TEXT
+    +treatment_name: VARCHAR[100]
+    +treatment_type: VARCHAR[50] /' type de tratamiento: "Estético", "Curativo", "Preventivo", etc. '/
+    /' Registro de los tratamientos disponibles, su first_name, type y costo asociado '/
 }
 
 entity "Appointment" as Appointment {
-    #ID_Cita: INT
-    +Fecha_Cita: DATE
-    +Fecha_End: Date
-    #ID_Paciente: INT
-    #ID_Tratamiento: INT
-    #ID_Horario: INT
-    #ID_Medico: INT
-    -Notas: TEXT
+    #id_appointment: INT
+    +appointment_date: DATETIME
+    +appointment_date_end: DATETIME
+    -notes: TEXT
+    -state: TEXT
+    ~id_person: INT
+    ~id_patient: INT
+    ~id_treatment: INT
     /' Información sobre cada cita médica, incluida la fecha, tratamiento, horario y médico '/
 }
 
 entity "Diagnosis" as Diagnosis {
-    #ID_Diagnostico: INT
-    +Fecha_Diagnostico: DATE
-    #ID_HistorialClinico: INT
-    +Descripcion: TEXT
-    -Recomendaciones: TEXT
+    #id_diagnosis: INT
+    +description: TEXT
+    +diagnosis_date: DATE
+    -recommendations: TEXT
+    ~id_medical_history: INT
     /' Registro de los diagnósticos realizados, asociados al historial clínico '/
 }
 
@@ -126,6 +135,7 @@ Person ||--o{ User : es
 Person ||--o{ Consultation : realiza
 Patient ||--|{ Medical_History : tiene
 'Odontogram ||--o{ OdontogramaDetalle : tiene
+
 'Medical_History ||--o{ Odontogram : contiene
 Medical_History ||--o{ VitalSings : registra
 Medical_History ||--o{ Clinical_Exam : incluye
@@ -133,7 +143,6 @@ Medical_History ||--o{ Clinical_Exam : incluye
 Patient ||--o{ Appointment : asiste a
 Doctor ||--o{ Appointment : atiende
 
-Appointment }o--|| Treatment : aplica
+Appointment }o--|| treatment : aplica
 Medical_History ||--o{ Diagnosis : contiene
-
 @enduml
