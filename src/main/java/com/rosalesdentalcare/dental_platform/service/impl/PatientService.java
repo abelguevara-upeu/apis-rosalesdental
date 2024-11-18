@@ -40,4 +40,14 @@ public class PatientService implements CRUDService<Patient, Long> {
     public void save(Patient obj) {
         repository.save(obj);
     }
+
+
+    public void filterByName(String name) {
+        repository.findByPerson_Dni(name);
+    }
+
+    
+    public void filterByDni(String name) {
+        repository.findByPerson_Dni(name);
+    }
 }

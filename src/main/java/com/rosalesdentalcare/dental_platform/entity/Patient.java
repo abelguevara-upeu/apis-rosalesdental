@@ -16,5 +16,8 @@ public class Patient {
     @ManyToOne
     @JoinColumn(name = "idPerson", nullable = false)
     private Person person;
+
+    private String antecedents;
+    private String alergies;
 }
 

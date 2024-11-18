@@ -1,0 +1,82 @@
+@startuml test
+
+actor Cliente
+entity DispatcherSpring
+
+'--- GET /api/patients/ ---
+Cliente -> DispatcherSpring : [GET /getAll/{id}]
+DispatcherSpring -> PatientController : list()
+PatientController -> PatientService : list()
+PatientService -> PatientRepository : findById(id): List
+PatientRepository -> Patient : new()
+PatientRepository --> PatientService : return List<Patient>
+PatientService --> PatientController : return List<Patient>
+PatientController --> DispatcherSpring : return ResponseEntity(List<Patient>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Patients
+
+'--- GET /api/patients/ ---
+Cliente -> DispatcherSpring : [GET /getOne/{id}]
+DispatcherSpring -> PatientController : getById(id)
+PatientController -> PatientService : getOne(id)
+PatientService -> PatientRepository : findById(id)
+PatientRepository -> Patient : new()
+PatientRepository --> PatientService : return Patient
+PatientService --> PatientController : return Patient
+PatientController --> DispatcherSpring : return ResponseEntity(Patient)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Patient
+
+' --- POST /api/patients/ ---
+Cliente -> DispatcherSpring : [POST /create]
+DispatcherSpring -> PatientController : create(patientDTO)
+PatientController -> PatientController: Mapper DTO to Patient
+PatientController -> PatientService : save(consultation)
+PatientService -> PatientRepository : save(consultation)
+PatientRepository -> PatientService : void
+PatientService -> PatientController : void
+PatientController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Patient
+
+' --- POST /api/patients/ ---
+Cliente -> DispatcherSpring : [PUT /create]
+DispatcherSpring -> PatientController : update(patientDTO)
+PatientController -> PatientController: Mapper DTO to Patient
+PatientController -> PatientService : save(consultation)
+PatientService -> PatientRepository : save(consultation)
+PatientRepository -> PatientService : void
+PatientService -> PatientController : void
+PatientController --> DispatcherSpring : return ResponseEntity()
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Patient
+
+' --- DELETE /api/patients/ ---
+Cliente -> DispatcherSpring : [DELETE /delete/{id}]
+DispatcherSpring -> PatientController: delete(id)
+PatientController -> PatientService : delete(id)
+PatientService -> PatientRepository : deleteById(id)
+PatientRepository --> PatientService : void
+PatientService --> PatientController : void
+PatientController --> Cliente : HTTP 204 No Content
+
+'--- GET /api/appointments/ ---
+Cliente -> DispatcherSpring : [GET /filterName/{name}]
+DispatcherSpring -> PatientController : filterByName(name)
+PatientController -> PatientService : filterByName(name)
+PatientService -> PatientRepository : filterByName(name): List<Patient>
+PatientRepository -> Patient : new()
+PatientRepository --> PatientService : return List<Patient>
+PatientService --> PatientController : return List<Patient>
+PatientController --> DispatcherSpring : return ResponseEntity(List<Patient>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Patients filtered
+
+
+'--- GET /api/appointments/ ---
+Cliente -> DispatcherSpring : [GET /filterDNI/{dni}]
+DispatcherSpring -> PatientController : filterByDni(dni)
+PatientController -> PatientService : filterByDni(dni)
+PatientService -> PatientRepository : filterByDni(dni): List<Patient>
+PatientRepository -> Patient : new()
+PatientRepository --> PatientService : return List<Dni>
+PatientService --> PatientController : return List<Dni>
+PatientController --> DispatcherSpring : return ResponseEntity(List<Patient>)
+DispatcherSpring -> Cliente : HTTP 200 OK with (JSON) Patients filtered
+
+@enduml

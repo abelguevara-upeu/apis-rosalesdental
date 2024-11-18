@@ -20,10 +20,19 @@ entity "Person" as Persona {
     /' Persona representa a la persona base, que puede ser paciente, médico o usuario '/
 }
 
+<<<<<<< Updated upstream
 entity "Patient" as Paciente {
     #ID_Paciente: INT
     #ID_Persona: INT
     /' Un paciente es una persona, pero con un historial clínico asociado '/
+=======
+entity "Patient" as Patient {
+    #id_patient: INT
+    ~id_person: INT
+    -antecedents: TEXT
+    -alergies: TEXT
+    /' Un paciente es una Person, pero con un historial clínico asociado '/
+>>>>>>> Stashed changes
 }
 
 entity "Doctor" as Medico {
@@ -62,6 +71,7 @@ entity "SignosVitales" as SignosVitales {
     /' Signos vitales registrados durante una consulta, asociados al historial clínico '/
 }
 
+<<<<<<< Updated upstream
 entity "Antecedentes" as Antecedentes {
     #ID_Antecedente: INT
     #ID_HistorialClinico: INT
@@ -77,6 +87,13 @@ entity "HistorialClinico" as HistorialClinico {
     #ID_Paciente: INT
     -Alergias: TEXT
     -Observaciones: TEXT
+=======
+entity "Medical_History" as Medical_History {
+    #id_history: INT
+    +creation_date: DATE
+    -observations: TEXT
+    ~id_patient: INT
+>>>>>>> Stashed changes
     /' El historial clínico se crea para cada paciente y contiene datos médicos relevantes '/
 }
 
@@ -144,6 +161,7 @@ entity "Diagnostico" as Diagnostico {
     /' Registro de los diagnósticos realizados, asociados al historial clínico '/
 }
 
+<<<<<<< Updated upstream
 Persona ||--o{ Paciente : es
 Persona ||--o{ Medico : es
 Persona ||--o{ User : es
@@ -160,4 +178,21 @@ Paciente ||--o{ Cita : asiste a
 HistorialClinico ||--o{ Diagnostico : contiene
 HorarioCita ||--o{ Cita : en
 Medico ||--o{ Cita : atiende
+=======
+Person ||--o{ Patient : es
+Person ||--o{ Doctor : es
+Person ||--o{ User : es
+Person ||--o{ Consultation : realiza
+Patient ||--|{ Medical_History : tiene
+'Odontogram ||--o{ OdontogramaDetalle : tiene
+'Medical_History ||--o{ Odontogram : contiene
+Medical_History ||--o{ VitalSings : registra
+Medical_History ||--o{ Clinical_Exam : incluye
+
+Patient ||--o{ Appointment : asiste a
+Doctor ||--o{ Appointment : atiende
+
+Appointment }o--|| treatment : aplica
+Medical_History ||--o{ Diagnosis : contiene
+>>>>>>> Stashed changes
 @enduml

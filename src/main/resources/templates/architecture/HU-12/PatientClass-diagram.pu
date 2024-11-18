@@ -2,6 +2,8 @@
 package repository {
 
   interface PatientRepository {
+    +findByPerson_Name(String name): List<Patient>
+    +findByPerson_Dni(String: dni): List<Patient>
   }
 
   interface JpaRepository {
@@ -16,6 +18,9 @@ package controller {
     -personService: PersonService
     +create(obj: PatientDTO): void
     +update(id: Long, obj: PatientDTO): void
+
+    +filterByName(String name): List<Patient>
+    +filterByDni(String: dni): List<Patient>
   }
 }
 
@@ -24,6 +29,9 @@ package service {
   class PatientService {
     +save(obj: Patient): Patient
     +existsById(id: Long): boolean
+
+    +findByName(String name): List<Patient>
+    +filterByDni(String: dni): List<Appointment>
   }
 
   interface CRUDService{

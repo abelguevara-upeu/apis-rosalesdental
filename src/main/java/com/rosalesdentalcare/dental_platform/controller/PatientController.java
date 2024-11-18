@@ -87,4 +87,18 @@ public class PatientController {
         ApiResponse<Object> response = new ApiResponse<>(true, "Usuario eliminado exitosamente", null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/filterByDate/{id}")
+    public ResponseEntity<ApiResponse<Object>> filterByName (@PathVariable("id") String name) {
+        patientService.filterByName(name);
+        ApiResponse<Object> response = new ApiResponse<>(true, "Usuario eliminado exitosamente", null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/filterByDni/{id}")
+    public ResponseEntity<ApiResponse<Object>> filterByDni (@PathVariable("id") String dni) {
+        patientService.filterByDni(dni);
+        ApiResponse<Object> response = new ApiResponse<>(true, "Usuario eliminado exitosamente", null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

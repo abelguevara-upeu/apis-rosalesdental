@@ -6,4 +6,6 @@ import lombok.Data;
 public class PatientDTO {
     private Long idPatient;
     private Long personId;
+    private String antecedents;
+    private String alergies;
 }
