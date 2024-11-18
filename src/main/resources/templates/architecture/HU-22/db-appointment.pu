@@ -1,3 +1,64 @@
 @startuml relational_view
 
+/'{
+    # PRIMARY KEY
+    ~ UNIQUE (NULLABLE)
+    + NOT NULL
+    - NULLABLE
+}'/
+
+entity "Person" as Person {
+    #id_person: INT
+    -address: VARCHAR[255]
+    -brith_date: DATE
+    -dni: VARCHAR[10]
+    +first_name: VARCHAR[100]
+    -gender: CHAR[1]
+    +last_name_father: VARCHAR[100]
+    +last_name_mother: VARCHAR[100]
+    +phone: VARCHAR[15]
+    /' Person representa a la Person base, que puede ser paciente, médico o usuario '/
+}
+
+entity "Patient" as Patient {
+    #id_patient: INT
+    ~id_person: INT
+    /' Un paciente es una Person, pero con un historial clínico asociado '/
+}
+
+entity "Doctor" as Doctor {
+    #id_doctor: INT
+    -specialty: VARCHAR[100]
+    ~id_person: INT
+    /' El médico es una Person con una specialty profesional '/
+}
+
+entity "Treatment" as Treatment {
+    #id_treatment: INT
+    -cost: DECIMAL[10,2]
+    -description: TEXT
+    +treatment_name: VARCHAR[100]
+    +treatment_type: VARCHAR[50] /' type de tratamiento: "Estético", "Curativo", "Preventivo", etc. '/
+    /' Registro de los tratamientos disponibles, su first_name, type y costo asociado '/
+}
+
+entity "Appointment" as Appointment {
+    #id_appointment: INT
+    +appointment_date: DATETIME
+    +appointment_date_end: DATETIME
+    -notes: TEXT
+    -state: TEXT
+    ~id_person: INT
+    ~id_patient: INT
+    ~id_treatment: INT
+    /' Información sobre cada cita médica, incluida la fecha, tratamiento, horario y médico '/
+}
+
+Person ||--o{ Patient : es
+Person ||--o{ Doctor : es
+Patient ||--o{ Appointment : asiste a
+Doctor ||--o{ Appointment : atiende
+Appointment }o--|| Treatment : aplica
+
 @enduml
+
