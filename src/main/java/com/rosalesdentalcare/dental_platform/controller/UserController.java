@@ -18,18 +18,20 @@ import com.rosalesdentalcare.dental_platform.service.impl.UserService;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired private UserService service;
-    @Autowired private ModelMapper mapper;
+    @Autowired
+    private UserService service;
+    @Autowired
+    private ModelMapper mapper;
 
     @GetMapping("/getAll")
-    public ResponseEntity<ApiResponse<List<User>>> list () {
+    public ResponseEntity<ApiResponse<List<User>>> list() {
         List<User> list = service.list();
         ApiResponse<List<User>> response = new ApiResponse<>(true, "Lista de usuarios obtenida exitosamente", list);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
-    public ResponseEntity<ApiResponse<User>> getById (@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<User>> getById(@PathVariable("id") Long id) {
         if (!service.existsById(id)) {
             ApiResponse<User> response = new ApiResponse<>(false, "Usuario no encontrado", null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -40,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Object>> create (@RequestBody UserDTO dto) {
+    public ResponseEntity<ApiResponse<Object>> create(@RequestBody UserDTO dto) {
         if (Optional.ofNullable(dto).isEmpty()) {
             ApiResponse<Object> response = new ApiResponse<>(false, "Los campos son obligatorios", null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -52,8 +54,22 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/login")
+public ResponseEntity<ApiResponse<User>> login(@RequestBody UserDTO loginDTO) {
+    Optional<User> user = service.findByUsername(loginDTO.getUsername());
+
+    if (user.isPresent() && user.get().getPassword().equals(loginDTO.getPassword())) {
+        // Devuelve el usuario si las credenciales son correctas
+        return ResponseEntity.ok(new ApiResponse<>(true, "Login exitoso", user.get()));
+    }
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(new ApiResponse<>(false, "Credenciales inválidas", null));
+}
+
+
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse<Object>> update (@PathVariable("id") Long id, @RequestBody UserDTO dto) {
+    public ResponseEntity<ApiResponse<Object>> update(@PathVariable("id") Long id, @RequestBody UserDTO dto) {
         if (!service.existsById(id)) {
             ApiResponse<Object> response = new ApiResponse<>(false, "Usuario no encontrado", null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -61,10 +77,12 @@ public class UserController {
         // Buscar el usuario existente
         User obj = service.getOne(id).get();
 
-        // Mapear el DTO al usuario existente, actualizando solo los campos que están en el DTO
+        // Mapear el DTO al usuario existente, actualizando solo los campos que están en
+        // el DTO
         mapper.map(dto, obj);
 
-        // Asegurarnos de que el id del usuario no se sobrescriba (ya que es una entidad existente)
+        // Asegurarnos de que el id del usuario no se sobrescriba (ya que es una entidad
+        // existente)
         obj.setIdUser(id);
 
         // Guardar el usuario actualizado
@@ -75,7 +93,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<Object>> delete (@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<Object>> delete(@PathVariable("id") Long id) {
         if (!service.existsById(id)) {
             ApiResponse<Object> response = new ApiResponse<>(false, "Usuario no encontrado", null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

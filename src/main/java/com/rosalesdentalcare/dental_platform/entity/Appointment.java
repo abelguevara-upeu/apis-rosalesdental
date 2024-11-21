@@ -2,7 +2,6 @@ package com.rosalesdentalcare.dental_platform.entity;
 import jakarta.persistence.*;
 import java.util.Date;
 
-import com.rosalesdentalcare.dental_platform.dto.AppointmentDTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

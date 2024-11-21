@@ -41,4 +41,8 @@ public class UserService implements CRUDService<User, Long> {
     public void save(User obj) {
         repository.save(obj);
     }
+
+    public Optional<User> findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
 }
